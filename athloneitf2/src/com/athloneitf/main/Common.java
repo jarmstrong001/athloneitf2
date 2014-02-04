@@ -44,7 +44,7 @@ public class Common {
 	public static Member getMember(String barCode){
 		Member returnMember=null;
 		Session session=startSession();
-		Query memberQuery = session.createQuery("FROM AITFMember "+
+		Query memberQuery = session.createQuery("FROM Member "+
 				"WHERE MemberBarCode="+barCode);
 				List<Member> member=memberQuery.list();
 				System.out.println(member.size()+" records");
@@ -70,7 +70,7 @@ public class Common {
 		MemberScanOut scanOut=new MemberScanOut();
 		scanOut.setMemberCode(member.getMemberCode());
 		scanOut.setScanOutTime(new Date());
-		scanOut.setAutoScanOut(auto);
+		scanOut.setScanOutType(ScanOutType.AUTO);
 		member.setScannedInStatus(false);
 		session.update(member);
 		session.save(scanOut);
@@ -80,7 +80,7 @@ public class Common {
 	public static void autoScanOut(){
 		List<Member> memberList; 
 		Session session=startSession();
-		Query memberQuery = session.createQuery("FROM AITFMember ");
+		Query memberQuery = session.createQuery("FROM Member ");
 		memberList=memberQuery.list();
 		session.getTransaction().commit();
 		for(Member member:memberList){

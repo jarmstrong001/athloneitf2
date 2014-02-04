@@ -17,13 +17,13 @@ public class MemberScanOut {
 	@Column
 	private int memberCode;
 	@Column 
-	private boolean autoScanOut;
+	private ScanOutType scanOutType;
 	
-	public boolean isAutoScanOut() {
-		return autoScanOut;
+	public ScanOutType getScanOutType() {
+		return scanOutType;
 	}
-	public void setAutoScanOut(boolean autoScanOut) {
-		this.autoScanOut = autoScanOut;
+	public void setScanOutType(ScanOutType type) {
+		this.scanOutType = type;
 	}
 	public int getId() {
 		return id;
