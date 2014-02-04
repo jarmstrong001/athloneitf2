@@ -5,10 +5,12 @@
 	<artifactId>athloneitf2</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<dependencies>
+		<!-- <dependency> <groupId>org.hibernate</groupId> <artifactId>hibernate-entitymanager</artifactId> 
+			<version>4.3.1.Final</version> </dependency> -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-entitymanager</artifactId>
-			<version>4.3.1.Final</version>
+			<artifactId>hibernate-core</artifactId>
+			<version>4.2.7.SP1</version>
 		</dependency>
 	</dependencies>
 
