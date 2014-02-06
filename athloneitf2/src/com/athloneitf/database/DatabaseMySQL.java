@@ -20,7 +20,7 @@ public class DatabaseMySQL {
 		session.beginTransaction();
 		return session;
 	}
-	
+
 	public Member loginInstructor(String instructorBarCode){
 		Member returnValue=null;
 		try {
@@ -38,7 +38,7 @@ public class DatabaseMySQL {
 		} catch(SQLException sqle){sqle.printStackTrace();}
 		return returnValue;
 	}
-	
+
 	public void insertInstructorLogin(String instructorBarCode){
 		// Log instructor into database
 		Session session=startSession();
@@ -46,9 +46,9 @@ public class DatabaseMySQL {
 		"InstructorLogin(MemberBarCode,LoginTime) VALUES('"+instructorBarCode+"',now())");
 		instructorLoginInsert.executeUpdate();
 		session.getTransaction().commit();
-		
+
 	}
-	
+
 	private void logoutAllInstructors() throws SQLException{
 		// Logout all instructors from database
 		Session session=startSession();
@@ -57,8 +57,8 @@ public class DatabaseMySQL {
 		instructorLoginUpdate.executeUpdate();
 		session.getTransaction().commit();
 	}
-	
-	
-	
+
+
+
 
 }
