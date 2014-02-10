@@ -33,6 +33,7 @@
         <mapping class="com.athloneitf.datatype.InstructorLogin" />
         <mapping class="com.athloneitf.datatype.MemberScanIn" />
         <mapping class="com.athloneitf.datatype.MemberScanOut" />
+        <mapping class="com.athloneitf.datatype.PaymentType" />
     </session-factory>  
   
 </hibernate-configuration>  

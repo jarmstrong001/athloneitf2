@@ -18,6 +18,9 @@ public class InitializeData {
 		
 		queryMember(session);
 		
+		setupPayments(session);
+		
+		session.getTransaction().commit();
 	
 	}
 
@@ -32,12 +35,12 @@ public class InitializeData {
 
         }
 
-        session.getTransaction().commit();
+        
 
     }
     
 
-    public static void createMember(Session session) {
+    private static void createMember(Session session) {
     	Member person = new Member();
     	Member person2 = new Member();
     	Member person3 = new Member();
@@ -83,6 +86,68 @@ public class InitializeData {
         
     }
     
+    private static void setupPayments(Session session){
+    	PaymentType pt1=new PaymentType();
+    	PaymentType pt2=new PaymentType();
+    	PaymentType pt3=new PaymentType();
+    	PaymentType pt4=new PaymentType();
+    	PaymentType pt5=new PaymentType();
+    	PaymentType pt6=new PaymentType();
+    	PaymentType pt7=new PaymentType();
+    	PaymentType pt8=new PaymentType();
+    	
+    	pt1.setPaymentTypeId(1);
+    	pt1.setPaymentPeriod(PaymentPeriod.MONTH);
+    	pt1.setPaymentAmount(30.00);
+    	pt1.setPaymentTypeName("TKD");
+    	session.save(pt1);
+    	
+    	pt2.setPaymentTypeId(2);
+    	pt2.setPaymentPeriod(PaymentPeriod.MONTH);
+    	pt2.setPaymentAmount(25.00);
+    	pt2.setPaymentTypeName("TKD(Family)");
+    	session.save(pt2);
+    	
+    	pt3.setPaymentTypeId(3);
+    	pt3.setPaymentPeriod(PaymentPeriod.YEAR);
+    	pt3.setPaymentAmount(30.00);
+    	pt3.setPaymentTypeName("IUTF Membership");
+    	session.save(pt3);
+    	
+    	pt4.setPaymentTypeId(4);
+    	pt4.setPaymentPeriod(PaymentPeriod.YEAR);
+    	pt4.setPaymentAmount(15.00);
+    	pt4.setPaymentTypeName("Insurance");
+    	session.save(pt4);
+    	
+    	pt5.setPaymentTypeId(5);
+    	pt5.setPaymentPeriod(PaymentPeriod.DAY);
+    	pt5.setPaymentAmount(5.00);
+    	pt5.setPaymentTypeName("Skyboxing (TKD Member)");
+    	session.save(pt5);
+    	
+    	pt6.setPaymentTypeId(6);
+    	pt6.setPaymentPeriod(PaymentPeriod.DAY);
+    	pt6.setPaymentAmount(7.00);
+    	pt6.setPaymentTypeName("Skyboxing (morning)");
+    	session.save(pt6);
+    	
+    	pt7.setPaymentTypeId(7);
+    	pt7.setPaymentPeriod(PaymentPeriod.DAY);
+    	pt7.setPaymentAmount(8.00);
+    	pt7.setPaymentTypeName("Skyboxing (WKU Member)");
+    	session.save(pt7);
+    	
+    	pt8.setPaymentTypeId(8);
+    	pt8.setPaymentPeriod(PaymentPeriod.DAY);
+    	pt8.setPaymentAmount(10.00);
+    	pt8.setPaymentTypeName("Skyboxing evening");
+    	session.save(pt8);
+    	
+    	
+    	
+    	
+    }
     
 
 }
