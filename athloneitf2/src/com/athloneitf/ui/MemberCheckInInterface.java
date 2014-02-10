@@ -1,14 +1,3 @@
-/*------------------------------------------------------------------------------
- *******************************************************************************
- * COPYRIGHT Ericsson 2012
- *
- * The copyright to the computer program(s) herein is the property of
- * Ericsson Inc. The programs may be used and/or copied only with written
- * permission from Ericsson Inc. or in accordance with the terms and
- * conditions stipulated in the agreement/contract under which the
- * program(s) have been supplied.
- *******************************************************************************
- *----------------------------------------------------------------------------*/
 package com.athloneitf.ui;
 
 import java.awt.BorderLayout;
@@ -37,6 +26,7 @@ public class MemberCheckInInterface extends JFrame {
       };
 	
 	public MemberCheckInInterface(ClassType classType){
+		setIconImage(CommonUI.getIcon(classType));
 		instructor=Common.getLoggedInInstructor();
 		setTitle("Athlone ITF - instructor "+instructor.getName());
 		setSize(400,400);
@@ -53,8 +43,10 @@ public class MemberCheckInInterface extends JFrame {
 	        loginPanel.add(resultLabel);
 	        add(loginPanel,BorderLayout.CENTER);
 	        File file;
+	        System.out.println("ClassType="+classType.name());
+	        
 	        if(classType==ClassType.TAEKWONDO) file=new File("images/tkd.png");
-	        if(classType==ClassType.KICKBOXING) file=new File("images/AthloneKickboxing.jpg");
+	        else if(classType==ClassType.KICKBOXING) file=new File("images/AthloneKickboxing.jpg");
 	        else file=new File("images/Skyboxing.jpg");
 	        BufferedImage myPicture=null;
 	        try {

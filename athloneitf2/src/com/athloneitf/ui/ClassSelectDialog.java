@@ -19,96 +19,81 @@ import com.athloneitf.main.Common;
 import com.athloneitf.main.Main;
 
 public class ClassSelectDialog extends JDialog {
-	
+
 	private static final long serialVersionUID = -705825594149403522L;
-	private Session session=Common.startSession();
-	
+	// private Session session=Common.startSession();
+
 	private final JButton selectTaekwondoClassButton;
 	private final JButton selectSkyboxingClassButton;
 	private final JButton selectKickboxingClassButton;
-	private final JPanel panel=new JPanel(new BorderLayout());
-	
-	
+	private final JPanel panel = new JPanel(new BorderLayout());
+
 	public ClassSelectDialog(Member instructor) {
+
+		BufferedImage tkdIcon = CommonUI.getTkdIcon();
+		BufferedImage skyIcon = CommonUI.getSkyIcon();
+		BufferedImage kickIcon = CommonUI.getKickIcon();
 		
-		
-		
-		BufferedImage tkdIcon=new BufferedImage(1,1,1);
-		BufferedImage skyIcon=new BufferedImage(1,1,1);
-		BufferedImage kickIcon=new BufferedImage(1,1,1);
-		try{
-			tkdIcon = ImageIO.read(new File("images/tkd.png"));
-			tkdIcon=Common.resize(tkdIcon,100,100);
-			skyIcon = ImageIO.read(new File("images/Skyboxing.jpg"));
-			skyIcon=Common.resize(skyIcon,100,100);
-			kickIcon = ImageIO.read(new File("images/AthloneKickboxing.jpg"));
-			kickIcon=Common.resize(kickIcon,100,100);
-		}catch(IOException ioe){ioe.printStackTrace();}
 		Image img = new ImageIcon(tkdIcon).getImage();
 		setIconImage(img);
 		this.setTitle("Choose class type");
-		
-		
-	selectTaekwondoClassButton=new JButton(new ImageIcon(tkdIcon));
-	selectTaekwondoClassButton.setBorder(BorderFactory.createEmptyBorder());
-	selectTaekwondoClassButton.setContentAreaFilled(false);
-	selectSkyboxingClassButton=new JButton(new ImageIcon(skyIcon));
-	selectSkyboxingClassButton.setBorder(BorderFactory.createEmptyBorder());
-	selectSkyboxingClassButton.setContentAreaFilled(false);
-	selectKickboxingClassButton=new JButton(new ImageIcon(kickIcon));
-	selectKickboxingClassButton.setBorder(BorderFactory.createEmptyBorder());
-	selectKickboxingClassButton.setContentAreaFilled(false);
-	
-	JLabel instructorLabel = new JLabel(instructor.getName()+" is logged in. Please select class type");
-	panel.add(instructorLabel,BorderLayout.NORTH);
-	JPanel buttonPanel=new JPanel();
-	GridLayout gl=new GridLayout(1,3);
-	buttonPanel.setLayout(gl);
-		
-	buttonPanel.add(selectTaekwondoClassButton);
-	buttonPanel.add(selectSkyboxingClassButton);
-	buttonPanel.add(selectKickboxingClassButton);
-	panel.add(buttonPanel);
-	JButton logoutButton = new JButton("Logout");
-	panel.add(logoutButton,BorderLayout.SOUTH);
-	
-	selectTaekwondoClassButton.addActionListener(new ActionListener()
-			{
-				
-				public void actionPerformed(ActionEvent e){
-					MemberCheckInInterface mcii=new MemberCheckInInterface(ClassType.TAEKWONDO);
-        			mcii.setVisible(true);
-				}
-			
+
+		selectTaekwondoClassButton = new JButton(new ImageIcon(tkdIcon));
+		selectTaekwondoClassButton.setBorder(BorderFactory.createEmptyBorder());
+		selectTaekwondoClassButton.setContentAreaFilled(false);
+		selectSkyboxingClassButton = new JButton(new ImageIcon(skyIcon));
+		selectSkyboxingClassButton.setBorder(BorderFactory.createEmptyBorder());
+		selectSkyboxingClassButton.setContentAreaFilled(false);
+		selectKickboxingClassButton = new JButton(new ImageIcon(kickIcon));
+		selectKickboxingClassButton
+				.setBorder(BorderFactory.createEmptyBorder());
+		selectKickboxingClassButton.setContentAreaFilled(false);
+
+		JLabel instructorLabel = new JLabel(instructor.getName()
+				+ " is logged in. Please select class type");
+		panel.add(instructorLabel, BorderLayout.NORTH);
+		JPanel buttonPanel = new JPanel();
+		GridLayout gl = new GridLayout(1, 3);
+		buttonPanel.setLayout(gl);
+
+		buttonPanel.add(selectTaekwondoClassButton);
+		buttonPanel.add(selectSkyboxingClassButton);
+		buttonPanel.add(selectKickboxingClassButton);
+		panel.add(buttonPanel);
+		JButton logoutButton = new JButton("Logout");
+		panel.add(logoutButton, BorderLayout.SOUTH);
+
+		selectTaekwondoClassButton.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				MemberCheckInInterface mcii = new MemberCheckInInterface(
+						ClassType.TAEKWONDO);
+				mcii.setVisible(true);
 			}
-			);
-	selectSkyboxingClassButton.addActionListener(new ActionListener()
-	{
-		
-		public void actionPerformed(ActionEvent e){
-			MemberCheckInInterface mcii=new MemberCheckInInterface(ClassType.SKYBOXING);
-			mcii.setVisible(true);
-		}
-	
-	}
-	);
-	selectTaekwondoClassButton.addActionListener(new ActionListener()
-	{
-		
-		public void actionPerformed(ActionEvent e){
-			MemberCheckInInterface mcii=new MemberCheckInInterface(ClassType.KICKBOXING);
-			mcii.setVisible(true);
-		}
-	
-	}
-	);
-	
-	
-	this.add(panel);
-	this.setSize(400,300);
-	this.setVisible(true);
-	
-	
-			
+
+		});
+		selectSkyboxingClassButton.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				MemberCheckInInterface mcii = new MemberCheckInInterface(
+						ClassType.SKYBOXING);
+				mcii.setVisible(true);
+			}
+
+		});
+		selectKickboxingClassButton.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				MemberCheckInInterface mcii = new MemberCheckInInterface(
+						ClassType.KICKBOXING);
+				mcii.setVisible(true);
+			}
+
+		});
+
+		this.add(panel);
+		this.setSize(400, 300);
+		this.setVisible(true);
+
 	}
 }
