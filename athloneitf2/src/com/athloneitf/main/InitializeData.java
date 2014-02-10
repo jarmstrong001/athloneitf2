@@ -32,7 +32,7 @@ public class InitializeData {
 
         }
 
-        //session.getTransaction().commit();
+        session.getTransaction().commit();
 
     }
     
