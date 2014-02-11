@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 
 import javax.imageio.ImageIO;
@@ -38,9 +39,11 @@ public class MemberCheckInInterface extends JFrame {
 	        final JLabel scanInLabel = new JLabel("Enter barcode to scan into class");
 	        final JTextField scanInTextField = new JTextField(10);
 	        final JLabel resultLabel = new JLabel("                ");
+	        final JTextArea paymentTextArea=new JTextArea("        \n       \n      \n");
 	        loginPanel.add(scanInLabel);
 	        loginPanel.add(scanInTextField);
 	        loginPanel.add(resultLabel);
+	        loginPanel.add(paymentTextArea);
 	        add(loginPanel,BorderLayout.CENTER);
 	        File file;
 	        System.out.println("ClassType="+classType.name());
@@ -81,6 +84,9 @@ public class MemberCheckInInterface extends JFrame {
 	        			else {	        				
 	        				Common.memberScanIn(member);
 	        				resultLabel.setText(member.getName()+" scanned into class at "+Common.timeFormat.format(new Date()));
+	        				System.out.println("Payment Status:"
+	        						+parseStringArrayList(Common.getPaymentStatusTkd(member)));
+	        				paymentTextArea.setText(parseStringArrayList(Common.getPaymentStatusTkd(member)));
 	        			}
 	        		}
 	        		else {
@@ -95,6 +101,15 @@ public class MemberCheckInInterface extends JFrame {
 	        
 	      
 		}
+	
+	private String parseStringArrayList(ArrayList<String> input){
+		String returnValue="";
+		for(String s:input){
+			returnValue.concat(s+"\n");
+		}
+		System.out.println(returnValue+" payment info");
+		return returnValue;
+	}
 	
 	
 }

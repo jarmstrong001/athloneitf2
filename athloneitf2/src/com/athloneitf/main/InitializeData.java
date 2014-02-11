@@ -158,5 +158,6 @@ public class InitializeData {
     	p1.setPaymentDate(Common.dobDateFormat.parse("02/Jan/2014"));
     	p1.setPaymentFrom(Common.dobDateFormat.parse("01/Jan/2014"));
     	p1.setPaymentTypeId(4);
+    	session.save(p1);
     }
 }

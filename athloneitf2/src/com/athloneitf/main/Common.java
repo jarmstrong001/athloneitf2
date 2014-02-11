@@ -101,7 +101,9 @@ public class Common {
 					c.get(Calendar.HOUR_OF_DAY)+":"+c.get(Calendar.MINUTE));
 			c.add(Calendar.HOUR_OF_DAY,-3);
 			System.out.println("Time to compare with scan in:"+
-					c.get(Calendar.HOUR_OF_DAY)+":"+c.get(Calendar.MINUTE));
+					c.get(Calendar.HOUR_OF_DAY)+":"+c.get(Calendar.MINUTE)+" "
+					+c.get(Calendar.DAY_OF_MONTH)+"/"+c.get(Calendar.MONTH)+"/"
+					+c.get(Calendar.YEAR));
 			System.out.println("Latest Scan in time:"+Common.dateFormat.format(latest.get(0).getScanInTime()));
 			if(c.after(latest.get(0).getScanInTime())){
 				memberScanOut(member,true);
@@ -126,11 +128,13 @@ public class Common {
 		
 		Session session=startSession();
 		// Check insurance is paid
-		List<Payment> paymentList=(List<Payment>) session.createQuery("From Payment WHERE "
+		List<Payment> paymentList=session.createQuery("From Payment WHERE "
 				+"membercode="+member.getMemberCode()+" AND paymentTypeId=4"
-				+" ORDER BY paymentFrom DESC");
+				+" ORDER BY paymentFrom DESC").list();
+		session.getTransaction().commit();
 		if(paymentList.size()>0){
 			Payment p=paymentList.get(0);
+			System.out.println("Payment "+p.getPaymentId());
 			Calendar paymentFrom=new GregorianCalendar();
 			paymentFrom.setTime(p.getPaymentFrom());
 			if(paymentFrom.before(minusYear)) paymentDefaults.add(
