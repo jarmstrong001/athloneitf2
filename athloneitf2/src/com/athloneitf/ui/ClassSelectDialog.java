@@ -75,7 +75,7 @@ public class ClassSelectDialog extends JDialog {
 		selectSkyboxingClassButton.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				MemberCheckInInterface mcii = new MemberCheckInInterface(
+				SkyboxingMemberCheckInInterface mcii = new SkyboxingMemberCheckInInterface(
 						ClassType.SKYBOXING);
 				mcii.setVisible(true);
 			}
@@ -84,7 +84,7 @@ public class ClassSelectDialog extends JDialog {
 		selectKickboxingClassButton.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				MemberCheckInInterface mcii = new MemberCheckInInterface(
+				KickboxingMemberCheckInInterface mcii = new KickboxingMemberCheckInInterface(
 						ClassType.KICKBOXING);
 				mcii.setVisible(true);
 			}

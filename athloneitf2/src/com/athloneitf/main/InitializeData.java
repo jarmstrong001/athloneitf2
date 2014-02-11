@@ -1,5 +1,6 @@
 package com.athloneitf.main;
 
+import java.text.ParseException;
 import java.util.*;
 
 import org.hibernate.Query;
@@ -18,7 +19,11 @@ public class InitializeData {
 		
 		queryMember(session);
 		
+		setupPaymentTypes(session);
+		
+		try{
 		setupPayments(session);
+		} catch(ParseException pe){ pe.printStackTrace();}
 		
 		session.getTransaction().commit();
 	
@@ -86,7 +91,7 @@ public class InitializeData {
         
     }
     
-    private static void setupPayments(Session session){
+    private static void setupPaymentTypes(Session session){
     	PaymentType pt1=new PaymentType();
     	PaymentType pt2=new PaymentType();
     	PaymentType pt3=new PaymentType();
@@ -143,11 +148,15 @@ public class InitializeData {
     	pt8.setPaymentAmount(10.00);
     	pt8.setPaymentTypeName("Skyboxing evening");
     	session.save(pt8);
-    	
-    	
-    	
-    	
+    	    	
     }
     
-
+    private static void setupPayments(Session session) throws ParseException{
+    	Payment p1=new Payment();
+    	p1.setMemberCode(12345001);
+    	p1.setPaymentAmount(15.00);
+    	p1.setPaymentDate(Common.dobDateFormat.parse("02/Jan/2014"));
+    	p1.setPaymentFrom(Common.dobDateFormat.parse("01/Jan/2014"));
+    	p1.setPaymentTypeId(4);
+    }
 }

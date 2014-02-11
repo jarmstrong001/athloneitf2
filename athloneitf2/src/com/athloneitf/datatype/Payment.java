@@ -20,7 +20,15 @@ public class Payment {
 	private Date paymentFrom;
 	@Column
 	private double paymentAmount;
+	@Column
+	private int paymentTypeId;
 	
+	public int getPaymentTypeId() {
+		return paymentTypeId;
+	}
+	public void setPaymentTypeId(int paymentTypeId) {
+		this.paymentTypeId = paymentTypeId;
+	}
 	public int getPaymentId() {
 		return paymentId;
 	}
@@ -51,5 +59,6 @@ public class Payment {
 	public void setPaymentAmount(double paymentAmount) {
 		this.paymentAmount = paymentAmount;
 	}
+	
 	
 }

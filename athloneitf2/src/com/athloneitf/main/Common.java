@@ -118,6 +118,36 @@ public class Common {
 		return member.isScannedInStatus();		
 	}
 	
+	public static ArrayList<String> getPaymentStatusTkd(Member member){
+		ArrayList<String> paymentDefaults=new ArrayList<String>(1);
+		Calendar c=Calendar.getInstance();
+		Calendar minusYear=Calendar.getInstance();
+		minusYear.add(Calendar.YEAR,-1);
+		
+		Session session=startSession();
+		// Check insurance is paid
+		List<Payment> paymentList=(List<Payment>) session.createQuery("From Payment WHERE "
+				+"membercode="+member.getMemberCode()+" AND paymentTypeId=4"
+				+" ORDER BY paymentFrom DESC");
+		if(paymentList.size()>0){
+			Payment p=paymentList.get(0);
+			Calendar paymentFrom=new GregorianCalendar();
+			paymentFrom.setTime(p.getPaymentFrom());
+			if(paymentFrom.before(minusYear)) paymentDefaults.add(
+					"Insurance not up to date. Last paid from "+dobDateFormat.format(p.getPaymentFrom()));
+		}else paymentDefaults.add("Insurance not paid");
+		
+		// Check IUTF is paid
+		
+		
+		
+		if(paymentDefaults.size()==0) paymentDefaults.add("Payment up to date");
+		return paymentDefaults;
+		
+	}
+	
+	
+	
 	public static String getDayOfWeek(int i){
 		switch(i){
 	        case 1: return "Sunday"; 
