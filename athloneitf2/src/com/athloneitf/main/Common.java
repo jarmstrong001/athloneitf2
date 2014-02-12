@@ -104,7 +104,9 @@ public class Common {
 					c.get(Calendar.HOUR_OF_DAY)+":"+c.get(Calendar.MINUTE)+" "
 					+c.get(Calendar.DAY_OF_MONTH)+"/"+c.get(Calendar.MONTH)+"/"
 					+c.get(Calendar.YEAR));
-			System.out.println("Latest Scan in time:"+Common.dateFormat.format(latest.get(0).getScanInTime()));
+			System.out.println(member.getName()+" Latest Scan in time:"+Common.dateFormat.format(latest.get(0).getScanInTime()));
+			System.out.println("Latest Scan in time:"+(latest.get(0).getScanInTime().getTime()));
+			System.out.println("Current time - 3hrs:"+c.getTimeInMillis());
 			if(c.after(latest.get(0).getScanInTime())){
 				memberScanOut(member,true);
 				System.out.println("Auto scanning out "+member.getName());
@@ -130,15 +132,16 @@ public class Common {
 		// Check insurance is paid
 		List<Payment> paymentList=session.createQuery("From Payment WHERE "
 				+"membercode="+member.getMemberCode()+" AND paymentTypeId=4"
-				+" ORDER BY paymentFrom DESC").list();
+				+" ORDER BY paymentTo DESC").list();
 		session.getTransaction().commit();
 		if(paymentList.size()>0){
 			Payment p=paymentList.get(0);
 			System.out.println("Payment "+p.getPaymentId());
-			Calendar paymentFrom=new GregorianCalendar();
-			paymentFrom.setTime(p.getPaymentFrom());
-			if(paymentFrom.before(minusYear)) paymentDefaults.add(
-					"Insurance not up to date. Last paid from "+dobDateFormat.format(p.getPaymentFrom()));
+			Calendar today=Calendar.getInstance();
+			Calendar paymentTo=new GregorianCalendar();
+			paymentTo.setTime(p.getPaymentTo());
+			if(paymentTo.before(today)) paymentDefaults.add(
+					"Insurance not up to date. Last paid up to "+dobDateFormat.format(p.getPaymentTo()));
 		}else paymentDefaults.add("Insurance not paid");
 		
 		// Check IUTF is paid

@@ -17,7 +17,7 @@ public class Payment {
 	@Column
 	private Date paymentDate;
 	@Column
-	private Date paymentFrom;
+	private Date paymentTo;
 	@Column
 	private double paymentAmount;
 	@Column
@@ -47,11 +47,11 @@ public class Payment {
 	public void setPaymentDate(Date paymentDate) {
 		this.paymentDate = paymentDate;
 	}
-	public Date getPaymentFrom() {
-		return paymentFrom;
+	public Date getPaymentTo() {
+		return paymentTo;
 	}
-	public void setPaymentFrom(Date paymentFrom) {
-		this.paymentFrom = paymentFrom;
+	public void setPaymentTo(Date paymentTo) {
+		this.paymentTo = paymentTo;
 	}
 	public double getPaymentAmount() {
 		return paymentAmount;
