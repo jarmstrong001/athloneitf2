@@ -75,7 +75,7 @@ public class SkyboxingMemberCheckInInterface extends JFrame {
 	        		if(member!=null) {
 	        			System.out.println(member.toString());
 	        			if(Common.isMemberScannedIn(""+member.getMemberCode())){
-	        				Common.memberScanOut(member, false);
+	        				Common.memberScanOut(member, ScanOutType.NORMAL);
 	        				resultLabel.setText(member.getName()+" scanned out of class at "+Common.timeFormat.format(new Date()));
 	        			}
 	        			else {	        				

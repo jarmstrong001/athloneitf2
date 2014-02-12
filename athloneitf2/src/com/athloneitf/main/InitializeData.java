@@ -204,7 +204,7 @@ public class InitializeData {
     	Payment p1=new Payment();
     	p1.setMemberCode(12345001);
     	p1.setPaymentAmount(15.00);
-    	p1.setPaymentDate(Common.dobDateFormat.parse("02/Sep/2014"));
+    	p1.setPaymentDate(Common.dobDateFormat.parse("02/Sep/2013"));
     	p1.setPaymentTo(Common.dobDateFormat.parse("31/Aug/2014"));
     	p1.setPaymentTypeId(4);
     	session.save(p1);

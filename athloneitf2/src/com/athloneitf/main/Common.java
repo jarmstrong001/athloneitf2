@@ -53,6 +53,17 @@ public class Common {
 				return returnMember;		
 	}
 	
+	public static List<Member> getMemberList(){
+		List<Member> memberList=new ArrayList<Member>();
+		Session session=startSession();
+		Query memberQuery = session.createQuery("FROM Member ");
+				memberList=memberQuery.list();
+				System.out.println("MemberList retrieved with "+memberList.size()+" records");
+				session.getTransaction().commit();
+						
+		return memberList;
+	}
+	
 	public static void memberScanIn(Member member){
 		Session session=startSession();
 		MemberScanIn scanIn=new MemberScanIn();
@@ -65,12 +76,12 @@ public class Common {
 		
 	}
 	
-	public static void memberScanOut(Member member,boolean auto){
+	public static void memberScanOut(Member member,ScanOutType scanOutType){
 		Session session=startSession();
 		MemberScanOut scanOut=new MemberScanOut();
 		scanOut.setMemberCode(member.getMemberCode());
 		scanOut.setScanOutTime(new Date());
-		scanOut.setScanOutType(ScanOutType.AUTO);
+		scanOut.setScanOutType(scanOutType);
 		member.setScannedInStatus(false);
 		session.update(member);
 		session.save(scanOut);
@@ -93,7 +104,8 @@ public class Common {
 	
 	public static void autoScanOutMember(Member member){
 		Session session=startSession();
-		List<MemberScanIn> latest=session.createQuery("FROM MemberScanIn ORDER BY scanInTime DESC").list();
+		List<MemberScanIn> latest=session.createQuery("FROM MemberScanIn "
+				+"WHERE memberCode="+member.getMemberCode()+" ORDER BY scanInTime DESC").list();
 		session.getTransaction().commit();
 		if(latest.size()>0){
 			Calendar c= Calendar.getInstance();
@@ -107,9 +119,10 @@ public class Common {
 			System.out.println(member.getName()+" Latest Scan in time:"+Common.dateFormat.format(latest.get(0).getScanInTime()));
 			System.out.println("Latest Scan in time:"+(latest.get(0).getScanInTime().getTime()));
 			System.out.println("Current time - 3hrs:"+c.getTimeInMillis());
-			if(c.after(latest.get(0).getScanInTime())){
-				memberScanOut(member,true);
-				System.out.println("Auto scanning out "+member.getName());
+			
+			if(c.getTimeInMillis()>latest.get(0).getScanInTime().getTime()){
+				memberScanOut(member,ScanOutType.AUTO);
+				System.out.println("MILLIS: Auto scanning out "+member.getName());
 			}
 				
 		}
@@ -122,8 +135,20 @@ public class Common {
 		return member.isScannedInStatus();		
 	}
 	
+	public static List<Member> getListOfScannedInMembers(){
+		List<Member> scannedInMembers=new ArrayList<Member>();
+		List<Member> allMembers=getMemberList();
+		for(Member m:allMembers){
+			if(isMemberScannedIn(""+m.getMemberCode())){
+				scannedInMembers.add(m);
+			}
+		}
+		
+		return scannedInMembers;
+	}
+	
 	public static ArrayList<String> getPaymentStatusTkd(Member member){
-		ArrayList<String> paymentDefaults=new ArrayList<String>(1);
+		ArrayList<String> paymentDefaults=new ArrayList<String>();
 		Calendar c=Calendar.getInstance();
 		Calendar minusYear=Calendar.getInstance();
 		minusYear.add(Calendar.YEAR,-1);
@@ -131,9 +156,10 @@ public class Common {
 		Session session=startSession();
 		// Check insurance is paid
 		List<Payment> paymentList=session.createQuery("From Payment WHERE "
-				+"membercode="+member.getMemberCode()+" AND paymentTypeId=4"
+				+"memberCode="+member.getMemberCode()+" AND paymentTypeId=4"
 				+" ORDER BY paymentTo DESC").list();
 		session.getTransaction().commit();
+		System.out.println("PaymentListSize="+paymentList.size());
 		if(paymentList.size()>0){
 			Payment p=paymentList.get(0);
 			System.out.println("Payment "+p.getPaymentId());

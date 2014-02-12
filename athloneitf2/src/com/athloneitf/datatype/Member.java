@@ -66,6 +66,10 @@ public class Member {
 	}
 	
 	public String toString(){
+		return getName()+(isInstructor() ? "\t (Instructor)":"");
+	}
+	
+	public String getString(){
 		return getFirstName()+" "+getSurname()+"\t"+
 	Common.dobDateFormat.format(getMemberDob())+"\t"+getMemberCode()+
 	(isInstructor() ? "\tinstructor":"");
