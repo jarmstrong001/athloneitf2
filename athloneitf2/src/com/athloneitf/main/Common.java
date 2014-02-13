@@ -109,16 +109,12 @@ public class Common {
 		session.getTransaction().commit();
 		if(latest.size()>0){
 			Calendar c= Calendar.getInstance();
-			System.out.println("Calendar time:"+
-					c.get(Calendar.HOUR_OF_DAY)+":"+c.get(Calendar.MINUTE));
+			//System.out.println("Calendar time:"+c.get(Calendar.HOUR_OF_DAY)+":"+c.get(Calendar.MINUTE));
 			c.add(Calendar.HOUR_OF_DAY,-3);
-			System.out.println("Time to compare with scan in:"+
-					c.get(Calendar.HOUR_OF_DAY)+":"+c.get(Calendar.MINUTE)+" "
-					+c.get(Calendar.DAY_OF_MONTH)+"/"+c.get(Calendar.MONTH)+"/"
-					+c.get(Calendar.YEAR));
-			System.out.println(member.getName()+" Latest Scan in time:"+Common.dateFormat.format(latest.get(0).getScanInTime()));
-			System.out.println("Latest Scan in time:"+(latest.get(0).getScanInTime().getTime()));
-			System.out.println("Current time - 3hrs:"+c.getTimeInMillis());
+			//System.out.println("Time to compare with scan in:"+c.get(Calendar.HOUR_OF_DAY)+":"+c.get(Calendar.MINUTE)+" "	+c.get(Calendar.DAY_OF_MONTH)+"/"+c.get(Calendar.MONTH)+"/"	+c.get(Calendar.YEAR));
+			//System.out.println(member.getName()+" Latest Scan in time:"+Common.dateFormat.format(latest.get(0).getScanInTime()));
+			//System.out.println("Latest Scan in time:"+(latest.get(0).getScanInTime().getTime()));
+			//System.out.println("Current time - 3hrs:"+c.getTimeInMillis());
 			
 			if(c.getTimeInMillis()>latest.get(0).getScanInTime().getTime()){
 				memberScanOut(member,ScanOutType.AUTO);
@@ -162,12 +158,12 @@ public class Common {
 		System.out.println("PaymentListSize="+paymentList.size());
 		if(paymentList.size()>0){
 			Payment p=paymentList.get(0);
-			System.out.println("Payment "+p.getPaymentId());
+			System.out.println("Payment "+p.getPaymentId()+" "+p);
 			Calendar today=Calendar.getInstance();
 			Calendar paymentTo=new GregorianCalendar();
 			paymentTo.setTime(p.getPaymentTo());
 			if(paymentTo.before(today)) paymentDefaults.add(
-					"Insurance not up to date. Last paid up to "+dobDateFormat.format(p.getPaymentTo()));
+					"Insurance not up to date. \nLast paid up to "+dobDateFormat.format(p.getPaymentTo()));
 		}else paymentDefaults.add("Insurance not paid");
 		
 		// Check IUTF is paid
@@ -175,6 +171,7 @@ public class Common {
 		
 		
 		if(paymentDefaults.size()==0) paymentDefaults.add("Payment up to date");
+		for(String s:paymentDefaults){ System.out.println(s);}
 		return paymentDefaults;
 		
 	}

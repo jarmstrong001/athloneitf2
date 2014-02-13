@@ -42,8 +42,7 @@ public class MemberCheckInInterface extends JFrame {
 				"Enter barcode to scan into class");
 		final JTextField scanInTextField = new JTextField(10);
 		final JLabel resultLabel = new JLabel("                ");
-		final JTextArea paymentTextArea = new JTextArea(
-				"        \n       \n      \n");
+		final JTextArea paymentTextArea = new JTextArea(5,25);
 		
 		updateMemberList();
 		
@@ -123,7 +122,7 @@ public class MemberCheckInInterface extends JFrame {
 	private String parseStringArrayList(ArrayList<String> input) {
 		String returnValue = "";
 		for (String s : input) {
-			returnValue.concat(s + "\n");
+			returnValue+=(s + "\n");
 		}
 		System.out.println(returnValue + " payment info");
 		return returnValue;

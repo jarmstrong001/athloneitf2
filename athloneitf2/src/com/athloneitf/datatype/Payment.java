@@ -4,6 +4,8 @@ import java.util.Date;
 
 import javax.persistence.*;
 
+import com.athloneitf.main.Common;
+
 @Entity
 public class Payment {
 
@@ -59,6 +61,9 @@ public class Payment {
 	public void setPaymentAmount(double paymentAmount) {
 		this.paymentAmount = paymentAmount;
 	}
-	
-	
+
+	public String toString(){
+		return getMemberCode()+" €"+getPaymentAmount()+" valid to "
+	+Common.dobDateFormat.format((getPaymentTo()))+" TypeID="+getPaymentTypeId();
+	}
 }
