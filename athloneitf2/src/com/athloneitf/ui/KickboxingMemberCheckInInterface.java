@@ -22,7 +22,7 @@ public class KickboxingMemberCheckInInterface extends JFrame {
 	private ActionListener updateClockAction = new ActionListener() {
 		  public void actionPerformed(ActionEvent e) {
 			  clock.setText(new Date().toString()); 
-		    }
+		    } 
       };
 	
 	public KickboxingMemberCheckInInterface(ClassType classType){
