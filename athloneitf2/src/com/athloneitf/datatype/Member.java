@@ -1,8 +1,11 @@
 package com.athloneitf.datatype;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import javax.persistence.*;
+
+import org.joda.time.*;
 
 import com.athloneitf.main.Common;
 
@@ -73,5 +76,17 @@ public class Member {
 		return getFirstName()+" "+getSurname()+"\t"+
 	Common.dobDateFormat.format(getMemberDob())+"\t"+getMemberCode()+
 	(isInstructor() ? "\tinstructor":"");
+	}
+	
+	public int getAgeAtTermStart(){
+		LocalDate birthdate=new LocalDate(memberDob);
+		LocalDate termStartDate=null;
+		int currentYear=Calendar.getInstance().get(Calendar.YEAR);
+		if(new LocalDate().isAfter(new LocalDate(currentYear,9,1))){
+			termStartDate=new LocalDate(currentYear,9,1);
+		}
+		else termStartDate=new LocalDate(currentYear-1,9,1);
+		Years age=Years.yearsBetween(birthdate,termStartDate);
+		return age.getYears();
 	}
 }

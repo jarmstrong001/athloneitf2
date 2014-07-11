@@ -1,8 +1,7 @@
 package com.athloneitf.ui;
 
 import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -43,6 +42,17 @@ public class MemberCheckInInterface extends JFrame {
 		final JTextField scanInTextField = new JTextField(10);
 		final JLabel resultLabel = new JLabel("                ");
 		final JTextArea paymentTextArea = new JTextArea(5,25);
+		
+		MouseListener mouseListener=new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				if(e.getClickCount()==2) {
+					Member selectedMember=(Member)memberList.getSelectedValue();
+					PaymentDialog pd=new PaymentDialog(selectedMember,ClassType.TAEKWONDO);
+					pd.setVisible(true);
+				}
+			}
+		};
+		memberList.addMouseListener(mouseListener);
 		
 		updateMemberList();
 		
@@ -90,6 +100,7 @@ public class MemberCheckInInterface extends JFrame {
 						resultLabel.setText(member.getName()
 								+ " scanned out of class at "
 								+ Common.timeFormat.format(new Date()));
+						paymentTextArea.setText("");
 						updateMemberList();
 					} else {
 						Common.memberScanIn(member);

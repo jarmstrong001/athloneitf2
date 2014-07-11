@@ -14,6 +14,8 @@ public class PaymentType {
 	double paymentAmount;
 	@Column
 	int paymentPeriod;
+	@Column
+	ClassType classType;
 	
 	public PaymentPeriod getPaymentPeriod() {
 		return PaymentPeriod.valueOf(paymentPeriod);
@@ -41,4 +43,15 @@ public class PaymentType {
 		this.paymentAmount = d;
 	}
 	
+	public ClassType getClassType(){
+		return classType;
+	}
+	
+	public void setClassType(ClassType ct){
+		this.classType=ct;
+	}
+	
+	public String toString(){
+		return String.format("€%9.2f  %s",paymentAmount,paymentTypeName);
+	}
 }
