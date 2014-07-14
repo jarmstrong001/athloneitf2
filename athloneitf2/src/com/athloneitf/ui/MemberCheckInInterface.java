@@ -82,7 +82,7 @@ public class MemberCheckInInterface extends JFrame {
 		scanOutAllButton.setSize(new Dimension(150,30));
 		loginPanel.add(scanInLabel);
 		loginPanel.add(scanInTextField);
-		loginPanel.add(resultLabel);
+		loginPanel.add(resultLabel); 
 		loginPanel.add(paymentTextArea);
 		add(loginPanel, BorderLayout.CENTER);
 		add(listPanel, BorderLayout.EAST);
