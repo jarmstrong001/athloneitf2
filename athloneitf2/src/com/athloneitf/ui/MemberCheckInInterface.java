@@ -45,6 +45,9 @@ public class MemberCheckInInterface extends JFrame {
 	private ActionListener scanOutAllAction=new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
 			Common.autoScanOutAll();
+			resultLabel.setText("All members"
+					+ " auto scanned out of class by Instructor at "
+					+ Common.timeFormat.format(new Date()));
 			paymentTextArea.setText("");
 			updateMemberList();
 		}

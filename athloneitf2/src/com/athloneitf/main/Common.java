@@ -13,6 +13,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 
 import com.athloneitf.datatype.*;
+import com.athloneitf.ui.media.Audio;
 
 public class Common {
 
@@ -76,7 +77,9 @@ public class Common {
 		session.update(member);
 		session.save(scanIn);
 		session.getTransaction().commit();
-		
+		try{
+			Audio.playWelcome();
+		}catch(Exception e){e.printStackTrace();}
 	}
 	
 	public static void memberScanOut(Member member,ScanOutType scanOutType){
@@ -89,6 +92,9 @@ public class Common {
 		session.update(member);
 		session.save(scanOut);
 		session.getTransaction().commit();
+		try{
+			Audio.playGoodbye();
+		}catch(Exception e){e.printStackTrace();}
 	}
 	
 	public static void autoScanOut(){

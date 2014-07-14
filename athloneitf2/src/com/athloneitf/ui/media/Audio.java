@@ -3,31 +3,42 @@ import java.io.*;
 import sun.audio.*;
 
 public class Audio {
+	
+	private static final String scanInFile="chime_up.wav";
+	private static final String scanOutFile="chime_down.wav";
+	private static boolean audio=false;
+	
+	public static boolean isAudio() {
+		return audio;
+	}
+
+	public static void setAudio(boolean a) {
+		audio = a;
+	}
+
 	public static void playWelcome() 
 			  throws Exception
 			  {
 			    // open the sound file as a Java input stream
-			    String gongFile = "audio/welcome.wav";
-			    InputStream in = new FileInputStream(gongFile);
+			    InputStream in = new FileInputStream("audio/"+scanInFile);
 
 			    // create an audiostream from the inputstream
 			    AudioStream audioStream = new AudioStream(in);
 
 			    // play the audio clip with the audioplayer class
-			    AudioPlayer.player.start(audioStream);
+			    if(isAudio())AudioPlayer.player.start(audioStream);
 			  }
 	
 	public static void playGoodbye() 
 			  throws Exception
 			  {
 			    // open the sound file as a Java input stream
-			    String gongFile = "audio/goodbye.wav";
-			    InputStream in = new FileInputStream(gongFile);
+			    InputStream in = new FileInputStream("audio/"+scanOutFile);
 
 			    // create an audiostream from the inputstream
 			    AudioStream audioStream = new AudioStream(in);
 
 			    // play the audio clip with the audioplayer class
-			    AudioPlayer.player.start(audioStream);
+			    if(isAudio())AudioPlayer.player.start(audioStream);
 			  }
 }
