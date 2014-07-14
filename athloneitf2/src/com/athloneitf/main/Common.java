@@ -59,8 +59,7 @@ public class Common {
 		Query memberQuery = session.createQuery("FROM Member ");
 				memberList=memberQuery.list();
 				System.out.println("MemberList retrieved with "+memberList.size()+" records");
-				session.getTransaction().commit();
-						
+				session.getTransaction().commit();			
 		return memberList;
 	}
 	
