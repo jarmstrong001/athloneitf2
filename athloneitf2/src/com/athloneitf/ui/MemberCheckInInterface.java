@@ -1,6 +1,7 @@
 package com.athloneitf.ui;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -20,10 +21,32 @@ public class MemberCheckInInterface extends JFrame {
 	private Member instructor;
 	private final JLabel clock;
 	final JList memberList = new JList();
+	private final JButton scanOutAllButton=new JButton("Scan Out All");
+	private final JTextField scanInTextField = new JTextField(10);
+	private final JPanel loginPanel = new JPanel();
+	private final JPanel listPanel = new JPanel(new BorderLayout());
+	private final JLabel scanInLabel = new JLabel(
+			"Enter barcode to scan into class");	
+	private final JLabel resultLabel = new JLabel("                ");
+	private final JTextArea paymentTextArea = new JTextArea(5,25);
 	
 	private ActionListener updateClockAction = new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
 			clock.setText(new Date().toString());
+		}
+	};
+	
+	private ActionListener blankPaymentTextAreaAction = new ActionListener() {
+		public void actionPerformed(ActionEvent e) {
+			paymentTextArea.setText("");
+		}
+	};
+	
+	private ActionListener scanOutAllAction=new ActionListener() {
+		public void actionPerformed(ActionEvent e) {
+			Common.autoScanOutAll();
+			paymentTextArea.setText("");
+			updateMemberList();
 		}
 	};
 
@@ -31,17 +54,13 @@ public class MemberCheckInInterface extends JFrame {
 		setIconImage(CommonUI.getIcon(classType));
 		instructor = Common.getLoggedInInstructor();
 		setTitle("Athlone ITF - instructor " + instructor.getName());
-		setSize(500, 500);
-		Timer t = new Timer(1000, updateClockAction);
-		t.start();
+		setSize(640, 480);
+		Timer updateClockTimer = new Timer(1000, updateClockAction);
+		updateClockTimer.start();
+		Timer paymentAreaTimer=new Timer(5000,blankPaymentTextAreaAction);
+		paymentAreaTimer.start();
 
-		final JPanel loginPanel = new JPanel();
-		final JPanel listPanel = new JPanel();
-		final JLabel scanInLabel = new JLabel(
-				"Enter barcode to scan into class");
-		final JTextField scanInTextField = new JTextField(10);
-		final JLabel resultLabel = new JLabel("                ");
-		final JTextArea paymentTextArea = new JTextArea(5,25);
+		
 		
 		MouseListener mouseListener=new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
@@ -56,7 +75,11 @@ public class MemberCheckInInterface extends JFrame {
 		
 		updateMemberList();
 		
-		listPanel.add(memberList);
+		listPanel.add(memberList,BorderLayout.CENTER);
+		memberList.setPreferredSize(new Dimension(150,200));
+		listPanel.add(scanOutAllButton,BorderLayout.SOUTH);
+		scanOutAllButton.addActionListener(scanOutAllAction);
+		scanOutAllButton.setSize(new Dimension(150,30));
 		loginPanel.add(scanInLabel);
 		loginPanel.add(scanInTextField);
 		loginPanel.add(resultLabel);
@@ -103,7 +126,7 @@ public class MemberCheckInInterface extends JFrame {
 						paymentTextArea.setText("");
 						updateMemberList();
 					} else {
-						Common.memberScanIn(member);
+						Common.memberScanIn(member,ClassType.TAEKWONDO);
 						resultLabel.setText(member.getName()
 								+ " scanned into class at "
 								+ Common.timeFormat.format(new Date()));

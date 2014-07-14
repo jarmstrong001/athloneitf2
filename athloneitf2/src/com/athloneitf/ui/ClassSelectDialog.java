@@ -27,6 +27,8 @@ public class ClassSelectDialog extends JDialog {
 	private final JButton selectSkyboxingClassButton;
 	private final JButton selectKickboxingClassButton;
 	private final JPanel panel = new JPanel(new BorderLayout());
+	private final JButton adminButton=new JButton("Admin");
+	private final JPanel adminPanel = new JPanel(new BorderLayout());
 
 	public ClassSelectDialog(Member instructor) {
 
@@ -59,9 +61,11 @@ public class ClassSelectDialog extends JDialog {
 		buttonPanel.add(selectTaekwondoClassButton);
 		buttonPanel.add(selectSkyboxingClassButton);
 		buttonPanel.add(selectKickboxingClassButton);
-		panel.add(buttonPanel);
+		panel.add(buttonPanel,BorderLayout.CENTER);
 		JButton logoutButton = new JButton("Logout");
 		panel.add(logoutButton, BorderLayout.SOUTH);
+		adminPanel.add(adminButton,BorderLayout.SOUTH);
+		
 
 		selectTaekwondoClassButton.addActionListener(new ActionListener() {
 
@@ -90,8 +94,16 @@ public class ClassSelectDialog extends JDialog {
 			}
 
 		});
+		
+		adminButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				AdminInterface ai = new AdminInterface();
+				ai.setVisible(true);
+			}
+		});
 
-		this.add(panel);
+		this.add(panel,BorderLayout.CENTER);
+		this.add(adminPanel,BorderLayout.SOUTH);
 		this.setSize(400, 300);
 		this.setVisible(true);
 

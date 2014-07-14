@@ -6,6 +6,9 @@ import java.awt.image.BufferedImage;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import javax.swing.JList;
+import javax.swing.ListModel;
+
 import org.hibernate.Query;
 import org.hibernate.Session;
 
@@ -63,11 +66,12 @@ public class Common {
 		return memberList;
 	}
 	
-	public static void memberScanIn(Member member){
+	public static void memberScanIn(Member member,ClassType classType){
 		Session session=startSession();
 		MemberScanIn scanIn=new MemberScanIn();
 		scanIn.setMemberCode(member.getMemberCode());
 		scanIn.setScanInTime(new Date());
+		scanIn.setClassType(classType);
 		member.setScannedInStatus(true);
 		session.update(member);
 		session.save(scanIn);
@@ -122,6 +126,12 @@ public class Common {
 				
 		}
 		return;
+	}
+	
+	public static void autoScanOutAll(){
+		for(Member m:getListOfScannedInMembers()){
+			memberScanOut(m,ScanOutType.AUTO);
+		}
 	}
 	
 	public static boolean isMemberScannedIn(String barCode){

@@ -90,7 +90,7 @@ public class SkyboxingMemberCheckInInterface extends JFrame {
 								+ " scanned out of class at "
 								+ Common.timeFormat.format(new Date()));
 					} else {
-						Common.memberScanIn(member);
+						Common.memberScanIn(member,ClassType.SKYBOXING);
 						resultLabel.setText(member.getName()
 								+ " scanned into class at "
 								+ Common.timeFormat.format(new Date()));
