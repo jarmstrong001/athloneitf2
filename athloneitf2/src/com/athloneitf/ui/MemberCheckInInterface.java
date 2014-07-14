@@ -31,7 +31,7 @@ public class MemberCheckInInterface extends JFrame {
 		setIconImage(CommonUI.getIcon(classType));
 		instructor = Common.getLoggedInInstructor();
 		setTitle("Athlone ITF - instructor " + instructor.getName());
-		setSize(400, 400);
+		setSize(500, 500);
 		Timer t = new Timer(1000, updateClockAction);
 		t.start();
 
