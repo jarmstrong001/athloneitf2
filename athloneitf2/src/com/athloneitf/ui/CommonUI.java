@@ -1,7 +1,6 @@
 package com.athloneitf.ui;
 
-import java.awt.Graphics2D;
-import java.awt.Image;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.Toolkit;
 import java.io.File;
@@ -14,6 +13,8 @@ import com.athloneitf.datatype.ClassType;
 import com.athloneitf.main.Common;
 
 public class CommonUI {
+	
+	public static final Dimension FULLSCREEN=new Dimension(640,480);
 
 	private static BufferedImage tkdIcon = new BufferedImage(1, 1, 1);
 	private static BufferedImage skyIcon = new BufferedImage(1, 1, 1);

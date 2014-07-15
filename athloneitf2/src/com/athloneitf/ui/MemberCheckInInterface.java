@@ -22,6 +22,7 @@ public class MemberCheckInInterface extends JFrame {
 	private final JLabel clock;
 	final JList memberList = new JList();
 	private final JButton scanOutAllButton=new JButton("Scan Out All");
+	private final JButton endClassButton=new JButton("End Class");
 	private final JTextField scanInTextField = new JTextField(10);
 	private final JPanel loginPanel = new JPanel();
 	private final JPanel listPanel = new JPanel(new BorderLayout());
@@ -52,12 +53,23 @@ public class MemberCheckInInterface extends JFrame {
 			updateMemberList();
 		}
 	};
+	
+	private ActionListener endClassAction=new ActionListener() {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			dispose();
+			new ClassSelectDialog(Common.getLoggedInInstructor());
+			
+		}
+		
+	};
 
 	public MemberCheckInInterface(ClassType classType) {
 		setIconImage(CommonUI.getIcon(classType));
 		instructor = Common.getLoggedInInstructor();
 		setTitle("Athlone ITF - instructor " + instructor.getName());
-		setSize(640, 480);
+		setSize(CommonUI.FULLSCREEN);
 		Timer updateClockTimer = new Timer(1000, updateClockAction);
 		updateClockTimer.start();
 		Timer paymentAreaTimer=new Timer(5000,blankPaymentTextAreaAction);
@@ -87,6 +99,8 @@ public class MemberCheckInInterface extends JFrame {
 		loginPanel.add(scanInTextField);
 		loginPanel.add(resultLabel); 
 		loginPanel.add(paymentTextArea);
+		endClassButton.addActionListener(endClassAction);
+		loginPanel.add(endClassButton);
 		add(loginPanel, BorderLayout.CENTER);
 		add(listPanel, BorderLayout.EAST);
 		File file;

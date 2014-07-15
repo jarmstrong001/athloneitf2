@@ -130,7 +130,7 @@ public class PaymentDialog extends JDialog {
 		panel.add(paymentStatusPanel,BorderLayout.EAST);
 		
 		this.getContentPane().add(panel);
-		this.setSize(700, 300);
+		this.setSize(CommonUI.FULLSCREEN);
 		this.setVisible(true);
 	}
 	

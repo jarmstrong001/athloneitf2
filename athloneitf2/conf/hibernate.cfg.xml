@@ -24,8 +24,8 @@
         <property name="hibernate.show_sql">true</property>  
   
 
-        <!--  Drop and re-create the database schema on startup    
-        <property name="hibernate.hbm2ddl.auto">create</property> -->  
+        <!--  Drop and re-create the database schema on startup   
+        <property name="hibernate.hbm2ddl.auto">create</property>   --> 
 
         
         <!-- current context -->

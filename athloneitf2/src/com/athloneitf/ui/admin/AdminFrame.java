@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 
 import com.athloneitf.datatype.Member;
+import com.athloneitf.ui.CommonUI;
 
 public class AdminFrame extends JFrame {
 
@@ -20,7 +21,7 @@ public class AdminFrame extends JFrame {
 		});
 		adminOptionsPanel.add(addMemberButton);
 		this.add(adminOptionsPanel);
-		this.setSize(640,480);
+		this.setSize(CommonUI.FULLSCREEN);
 		this.setVisible(true);
 	}
 }

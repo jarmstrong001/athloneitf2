@@ -5,6 +5,8 @@ import java.awt.GridLayout;
 
 import javax.swing.*;
 
+import com.athloneitf.ui.CommonUI;
+
 import net.sourceforge.jdatepicker.DateModel;
 import net.sourceforge.jdatepicker.impl.JDatePanelImpl;
 import net.sourceforge.jdatepicker.impl.UtilDateModel;
@@ -40,7 +42,7 @@ public class AddMemberDialog extends JDialog {
 		buttonPanel.add(exitButton);
 		mainPanel.add(buttonPanel,BorderLayout.SOUTH);
 		this.add(mainPanel);
-		this.setSize(640,480);
+		this.setSize(CommonUI.FULLSCREEN);
 		this.setVisible(true);
 		
 	}
