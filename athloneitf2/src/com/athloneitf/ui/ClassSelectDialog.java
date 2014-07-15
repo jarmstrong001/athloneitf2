@@ -68,7 +68,17 @@ public class ClassSelectDialog extends JDialog {
 		panel.add(logoutButton, BorderLayout.SOUTH);
 		adminPanel.add(adminButton,BorderLayout.SOUTH);
 		
+		logoutButton.addActionListener(new ActionListener() {
 
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				
+				ClassSelectDialog.this.dispose();
+				new UserInterface();
+			}
+			
+		});
+		
 		selectTaekwondoClassButton.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
@@ -107,7 +117,7 @@ public class ClassSelectDialog extends JDialog {
 
 
 
-		this.add(panel,BorderLayout.CENTER);
+		this.add(panel,BorderLayout.NORTH);
 
 		this.add(adminPanel,BorderLayout.SOUTH);
 		this.setSize(400, 300);

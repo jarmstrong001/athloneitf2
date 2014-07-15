@@ -40,6 +40,7 @@ public class AddMemberDialog extends JDialog {
 		buttonPanel.add(exitButton);
 		mainPanel.add(buttonPanel,BorderLayout.SOUTH);
 		this.add(mainPanel);
+		this.setSize(640,480);
 		this.setVisible(true);
 		
 	}
