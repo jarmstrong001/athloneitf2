@@ -17,6 +17,7 @@ import org.hibernate.Session;
 import com.athloneitf.datatype.*;
 import com.athloneitf.main.Common;
 import com.athloneitf.main.Main;
+import com.athloneitf.ui.admin.AdminFrame;
 
 public class ClassSelectDialog extends JDialog {
 
@@ -26,10 +27,12 @@ public class ClassSelectDialog extends JDialog {
 	private final JButton selectTaekwondoClassButton;
 	private final JButton selectSkyboxingClassButton;
 	private final JButton selectKickboxingClassButton;
+	private final JButton adminButton=new JButton("Admin");
 	private final JPanel panel = new JPanel(new BorderLayout());
+	private final JPanel adminPanel = new JPanel();
 
 	public ClassSelectDialog(Member instructor) {
-
+		
 		BufferedImage tkdIcon = CommonUI.getTkdIcon();
 		BufferedImage skyIcon = CommonUI.getSkyIcon();
 		BufferedImage kickIcon = CommonUI.getKickIcon();
@@ -90,8 +93,16 @@ public class ClassSelectDialog extends JDialog {
 			}
 
 		});
+		adminButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				AdminFrame af=new AdminFrame();
+			}
+		});
+		
+		adminPanel.add(adminButton);
 
-		this.add(panel);
+		this.add(panel,BorderLayout.NORTH);
+		this.add(adminPanel,BorderLayout.SOUTH);
 		this.setSize(400, 300);
 		this.setVisible(true);
 
