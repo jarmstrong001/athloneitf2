@@ -24,9 +24,17 @@ public class Member {
 	private boolean instructor;
 	@Column(name="ScannedInStatus")
 	private boolean scannedInStatus;
+	@Column(name="Center")
+	private Center center;
 	
 		
 	
+	public Center getCenter() {
+		return center;
+	}
+	public void setCenter(Center center) {
+		this.center = center;
+	}
 	public boolean isScannedInStatus() {
 		return scannedInStatus;
 	}

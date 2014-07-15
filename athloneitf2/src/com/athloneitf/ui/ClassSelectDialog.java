@@ -85,6 +85,7 @@ public class ClassSelectDialog extends JDialog {
 				MemberCheckInInterface mcii = new MemberCheckInInterface(
 						ClassType.TAEKWONDO);
 				mcii.setVisible(true);
+				ClassSelectDialog.this.dispose();
 			}
 
 		});
@@ -94,6 +95,7 @@ public class ClassSelectDialog extends JDialog {
 				SkyboxingMemberCheckInInterface mcii = new SkyboxingMemberCheckInInterface(
 						ClassType.SKYBOXING);
 				mcii.setVisible(true);
+				ClassSelectDialog.this.dispose();
 			}
 
 		});
@@ -103,6 +105,7 @@ public class ClassSelectDialog extends JDialog {
 				KickboxingMemberCheckInInterface mcii = new KickboxingMemberCheckInInterface(
 						ClassType.KICKBOXING);
 				mcii.setVisible(true);
+				ClassSelectDialog.this.dispose();
 			}
 
 		});
@@ -110,6 +113,7 @@ public class ClassSelectDialog extends JDialog {
 		adminButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				AdminFrame af=new AdminFrame();
+				ClassSelectDialog.this.dispose();
 			}
 		});
 		

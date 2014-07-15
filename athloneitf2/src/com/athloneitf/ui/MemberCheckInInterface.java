@@ -30,6 +30,7 @@ public class MemberCheckInInterface extends JFrame {
 			"Enter barcode to scan into class");	
 	private final JLabel resultLabel = new JLabel("                ");
 	private final JTextArea paymentTextArea = new JTextArea(5,25);
+	private final Timer paymentAreaTimer;
 	
 	private ActionListener updateClockAction = new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
@@ -72,21 +73,29 @@ public class MemberCheckInInterface extends JFrame {
 		setSize(CommonUI.FULLSCREEN);
 		Timer updateClockTimer = new Timer(1000, updateClockAction);
 		updateClockTimer.start();
-		Timer paymentAreaTimer=new Timer(5000,blankPaymentTextAreaAction);
+		paymentAreaTimer=new Timer(5000,blankPaymentTextAreaAction);
 		paymentAreaTimer.start();
 
 		
-		
-		MouseListener mouseListener=new MouseAdapter() {
+		MouseListener mouseListenerSingleClick=new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				if(e.getClickCount()==1) {
+					showPayment((Member)((JList)e.getSource()).getSelectedValue());
+				}
+			}
+		};
+		MouseListener mouseListenerDoubleClick=new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				if(e.getClickCount()==2) {
 					Member selectedMember=(Member)memberList.getSelectedValue();
 					PaymentDialog pd=new PaymentDialog(selectedMember,ClassType.TAEKWONDO);
 					pd.setVisible(true);
+					MemberCheckInInterface.this.dispose();
 				}
 			}
 		};
-		memberList.addMouseListener(mouseListener);
+		memberList.addMouseListener(mouseListenerSingleClick);
+		memberList.addMouseListener(mouseListenerDoubleClick);
 		
 		updateMemberList();
 		
@@ -150,8 +159,7 @@ public class MemberCheckInInterface extends JFrame {
 						System.out.println("Payment Status:"
 								+ parseStringArrayList(Common
 										.getPaymentStatusTkd(member)));
-						paymentTextArea.setText(parseStringArrayList(Common
-								.getPaymentStatusTkd(member)));
+						showPayment(member);
 						updateMemberList();
 					}
 				} else {
@@ -168,6 +176,12 @@ public class MemberCheckInInterface extends JFrame {
 	
 	private void updateMemberList(){
 		memberList.setListData(Common.getListOfScannedInMembers().toArray());
+	}
+	
+	private void showPayment(Member member){
+		paymentTextArea.setText(parseStringArrayList(Common
+				.getPaymentStatusTkd(member)));
+		paymentAreaTimer.start();
 	}
 
 	private String parseStringArrayList(ArrayList<String> input) {

@@ -69,7 +69,8 @@ public class PaymentDialog extends JDialog {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				dispose();				
+				dispose();
+				new MemberCheckInInterface(globalClassType);
 			}			
 		});
 		BufferedImage tkdIcon = CommonUI.getTkdIcon();

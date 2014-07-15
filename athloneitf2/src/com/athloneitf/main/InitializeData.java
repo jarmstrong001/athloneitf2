@@ -53,7 +53,8 @@ public class InitializeData {
     	
 
         person.setFirstName("Paul");
-        person.setSurname("Fox");       
+        person.setSurname("Fox");
+        person.setCenter(Center.ATHLONE);
         person.setMemberCode(12345001);
         Calendar c=Calendar.getInstance();
         c.set(1980,2,12,0,0,0);
@@ -64,6 +65,7 @@ public class InitializeData {
         
         person2.setFirstName("Kelly");
         person2.setSurname("McHugh");
+        person2.setCenter(Center.ATHLONE);
         person2.setMemberCode(12346002);
         c.set(1999,3,22,0,0,0);
         person2.setMemberDob(c.getTime());
@@ -73,6 +75,7 @@ public class InitializeData {
         
         person3.setFirstName("Joss");
         person3.setSurname("Armstrong");
+        person3.setCenter(Center.ATHLONE);
         person3.setMemberCode(12346001);
         c.set(1978,1,16,0,0,0);
         person3.setMemberDob(c.getTime());
@@ -82,6 +85,7 @@ public class InitializeData {
         
         person4.setFirstName("Isobel");
         person4.setSurname("Fox");
+        person4.setCenter(Center.ATHLONE);
         person4.setMemberCode(12345002);
         c.set(1981,2,29,0,0,0);
         person4.setMemberDob(c.getTime());

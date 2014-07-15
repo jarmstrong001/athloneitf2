@@ -67,6 +67,12 @@ public class Common {
 		return memberList;
 	}
 	
+	public static void addMember(Member member){
+		Session session=startSession();
+		session.save(member);
+		session.getTransaction().commit();
+	}
+	
 	public static void memberScanIn(Member member,ClassType classType){
 		Session session=startSession();
 		MemberScanIn scanIn=new MemberScanIn();
