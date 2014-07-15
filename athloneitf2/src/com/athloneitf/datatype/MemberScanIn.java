@@ -15,7 +15,15 @@ public class MemberScanIn {
 	private Date scanInTime;
 	@Column
 	private int memberCode;
+	@Column
+	private ClassType classType;
 	
+	public ClassType getClassType() {
+		return classType;
+	}
+	public void setClassType(ClassType classType) {
+		this.classType = classType;
+	}
 	public int getId() {
 		return id;
 	}
