@@ -47,7 +47,7 @@ public class PaymentDialog extends JDialog {
 	private final JDatePanelImpl paymentToPanel=new JDatePanelImpl(utilDateModel);
 	private final Member globalMember;
 	private final ClassType globalClassType;
-	private boolean dateSelected=false;
+	private boolean dateSelected=false; 
 	private boolean paymentAmountSelected=false;
 	
 	
