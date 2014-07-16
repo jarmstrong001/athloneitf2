@@ -14,6 +14,7 @@ import com.athloneitf.ui.CommonUI;
 public class AdminFrame extends JFrame {
 
 	private final JButton addMemberButton=new JButton("Add Member");
+	private final JButton getMemberPayments=new JButton("Get Member Payments");
 	private final JPanel adminOptionsPanel=new JPanel();
 	private final JLabel messageLabel=new JLabel();
 	private final JButton exitButton=new JButton("Exit");
