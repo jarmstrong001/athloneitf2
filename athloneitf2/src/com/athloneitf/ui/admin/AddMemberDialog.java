@@ -60,6 +60,7 @@ public class AddMemberDialog extends JDialog {
 				}
 				else {
 					Common.addMember(m);
+					messageLabel.setText("Member "+m.getName()+" added");
 				}
 				
 			}

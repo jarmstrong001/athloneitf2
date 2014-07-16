@@ -41,7 +41,8 @@ public class PaymentDialog extends JDialog {
 	private final JLabel paymentAmountLabel = new JLabel("Payment Amount");
 	private final JPanel paymentAmountPanel = new JPanel(new GridLayout(1,2));
 	private final JTextArea paymentStatusTextArea = new JTextArea(5,25);
-	private final JPanel paymentStatusPanel = new JPanel();
+	private final JTextArea messageTextArea=new JTextArea(5,25);
+	private final JPanel paymentStatusPanel = new JPanel(new BorderLayout());
 	private final DateModel utilDateModel=new UtilDateModel();
 	private final JDatePanelImpl paymentToPanel=new JDatePanelImpl(utilDateModel);
 	private final Member globalMember;
@@ -60,6 +61,10 @@ public class PaymentDialog extends JDialog {
 			public void actionPerformed(ActionEvent arg0) {
 				Common.makePayment(paymentTypeList.getSelectedValue(),globalMember,(Date)utilDateModel.getValue(),getPaymentAmount());
 				updatePaymentStatus(globalMember,globalClassType);
+				messageTextArea.setText("Payment made for "+globalMember.getName()
+						+"\n of "+getPaymentAmount()+" for "
+						+paymentTypeList.getSelectedValue().getPaymentTypeName()
+						+"\n up to date: "+((Date)utilDateModel.getValue()).toString());
 			}
 			
 		});
@@ -103,6 +108,7 @@ public class PaymentDialog extends JDialog {
 		});
 		panel.add(paymentToPanel,BorderLayout.CENTER);
 		
+		
 		paymentTypeList.setListData(Common.getPaymentTypes(ct).toArray(new PaymentType[1]));
 		paymentTypeList.addListSelectionListener(new ListSelectionListener(){
 
@@ -126,7 +132,8 @@ public class PaymentDialog extends JDialog {
 		buttonPanel.add(exitButton,BorderLayout.SOUTH);
 		panel.add(buttonPanel,BorderLayout.SOUTH);
 		
-		paymentStatusPanel.add(paymentStatusTextArea);
+		paymentStatusPanel.add(paymentStatusTextArea,BorderLayout.NORTH);
+		paymentStatusPanel.add(messageTextArea,BorderLayout.SOUTH);
 		updatePaymentStatus(member,ct);
 		panel.add(paymentStatusPanel,BorderLayout.EAST);
 		

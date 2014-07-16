@@ -22,7 +22,7 @@ public class MemberCheckInInterface extends JFrame {
 	private final JLabel clock;
 	final JList memberList = new JList();
 	private final JButton scanOutAllButton=new JButton("Scan Out All");
-	private final JButton endClassButton=new JButton("End Class");
+	private final JButton endClassButton=new JButton("Leave Class Checkin Screen");
 	private final JTextField scanInTextField = new JTextField(10);
 	private final JPanel loginPanel = new JPanel();
 	private final JPanel listPanel = new JPanel(new BorderLayout());

@@ -14,7 +14,7 @@ import com.athloneitf.ui.CommonUI;
 public class AdminFrame extends JFrame {
 
 	private final JButton addMemberButton=new JButton("Add Member");
-	private final JButton getMemberPayments=new JButton("Get Member Payments");
+	private final JButton getMemberPaymentsButton=new JButton("Get Member Payments");
 	private final JPanel adminOptionsPanel=new JPanel();
 	private final JLabel messageLabel=new JLabel();
 	private final JButton exitButton=new JButton("Exit");
@@ -29,6 +29,12 @@ public class AdminFrame extends JFrame {
 				AddMemberDialog am=new AddMemberDialog();
 			}
 		});
+		getMemberPaymentsButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+				GetMemberPaymentsDialog am=new GetMemberPaymentsDialog();
+			}
+		});
 		exitButton.addActionListener(new ActionListener() {
 
 			@Override
@@ -41,6 +47,7 @@ public class AdminFrame extends JFrame {
 		});
 		adminOptionsPanel.add(messageLabel,BorderLayout.NORTH);
 		adminOptionsPanel.add(addMemberButton,BorderLayout.CENTER);
+		adminOptionsPanel.add(getMemberPaymentsButton);
 		adminOptionsPanel.add(exitButton,BorderLayout.SOUTH);
 		
 		this.add(adminOptionsPanel);
