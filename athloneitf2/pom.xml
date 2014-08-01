@@ -22,11 +22,11 @@
 			<artifactId>joda-time</artifactId>
 			<version>2.2</version>
 		</dependency>
-		<!--  <dependency>
+		<dependency>
 			<groupId>athloneitf2Images</groupId>
 			<artifactId>athloneitf2Images</artifactId>
 			<version>1.0</version>
-		</dependency>-->
+		</dependency>
 
 	</dependencies>
 

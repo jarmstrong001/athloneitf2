@@ -20,27 +20,19 @@ public class CommonUI {
 	private static BufferedImage skyIcon = new BufferedImage(1, 1, 1);
 	private static BufferedImage kickIcon = new BufferedImage(1, 1, 1);
 
-	/*static {
-			tkdIcon= toBufferedImage(Toolkit.getDefaultToolkit().getImage(CommonUI.class.getClassLoader().getResource("images\\tkd.png")));
-			tkdIcon = Common.resize(tkdIcon, 100, 100);
-			skyIcon = toBufferedImage(Toolkit.getDefaultToolkit().getImage(CommonUI.class.getClassLoader().getResource("images\\Skyboxing.jpg")));
-			skyIcon = Common.resize(skyIcon, 100, 100);
-			kickIcon = toBufferedImage(Toolkit.getDefaultToolkit().getImage(CommonUI.class.getClassLoader().getResource("images\\AthloneKickboxing.jpg")));
-			kickIcon = Common.resize(kickIcon, 100, 100);
-	}*/
-	
 	static {
-		try {
-			tkdIcon = ImageIO.read(new File("images\\tkd.png"));
+		try{	
+			Image image=ImageIO.read(CommonUI.class.getClassLoader().getResource("images/tkd.png"));
+			tkdIcon= toBufferedImage(image);
 			tkdIcon = Common.resize(tkdIcon, 100, 100);
-			skyIcon = ImageIO.read(new File("images\\Skyboxing.jpg"));
+			skyIcon = toBufferedImage(ImageIO.read(CommonUI.class.getClassLoader().getResource("images/Skyboxing.jpg")));
 			skyIcon = Common.resize(skyIcon, 100, 100);
-			kickIcon = ImageIO.read(new File("images\\AthloneKickboxing.jpg"));
+			kickIcon = toBufferedImage(ImageIO.read(CommonUI.class.getClassLoader().getResource("images/AthloneKickboxing.jpg")));
 			kickIcon = Common.resize(kickIcon, 100, 100);
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
 		}
-	}	
+	}
 	
 	public static BufferedImage getTkdIcon(){
 		return tkdIcon;
