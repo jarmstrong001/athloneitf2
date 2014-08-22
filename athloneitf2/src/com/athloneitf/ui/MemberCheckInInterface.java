@@ -115,20 +115,8 @@ public class MemberCheckInInterface extends JFrame {
 		File file;
 		System.out.println("ClassType=" + classType.name());
 
-		if (classType == ClassType.TAEKWONDO)
-			file = new File("images/tkd.png");
-		else if (classType == ClassType.KICKBOXING)
-			file = new File("images/AthloneKickboxing.jpg");
-		else
-			file = new File("images/Skyboxing.jpg");
-		BufferedImage myPicture = null;
-		try {
-			BufferedImage myOversizedPicture = ImageIO.read(file);
-			myPicture = Common.resize(myOversizedPicture, 300, 200);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		JLabel picLabel = new JLabel(new ImageIcon(myPicture));
+		
+		JLabel picLabel = new JLabel(new ImageIcon(CommonUI.getPic(classType)));
 		add(picLabel, BorderLayout.NORTH);
 
 		clock = new JLabel(new Date().toString());

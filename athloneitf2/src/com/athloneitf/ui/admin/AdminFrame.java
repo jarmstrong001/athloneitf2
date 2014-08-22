@@ -26,7 +26,7 @@ public class AdminFrame extends JFrame {
 		addMemberButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
-				AddMemberDialog am=new AddMemberDialog();
+				AddMemberDialog am=new AddMemberDialog(" ");
 			}
 		});
 		getMemberPaymentsButton.addActionListener(new ActionListener() {

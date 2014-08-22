@@ -28,8 +28,8 @@ public class AddMemberDialog extends JDialog {
 	private final JLabel memberCodeLabel = new JLabel("Member Code");
 	private final JTextField memberCodeTextField = new JTextField(8);
 	private final JComboBox centerComboBox = new JComboBox(Center.values());
-	private final DateModel utilDateModel=new UtilDateModel();
-	private final JDatePanelImpl dobPanel=new JDatePanelImpl(utilDateModel);
+	private DateModel utilDateModel=new UtilDateModel();
+	private JDatePanelImpl dobPanel=new JDatePanelImpl(utilDateModel);
 	private final JButton addMemberButton=new JButton("Add Member");
 	private final JButton exitButton=new JButton("Exit");
 	private final JLabel messageLabel=new JLabel("");
@@ -38,7 +38,8 @@ public class AddMemberDialog extends JDialog {
 	private final JPanel buttonPanel=new JPanel(new BorderLayout());
 	private final JPanel datePanel=new JPanel();
 	
-	public AddMemberDialog(){
+	public AddMemberDialog(String message){
+		messageLabel.setText(message);
 		exitButton.addActionListener(new ActionListener() {
 
 			@Override
@@ -56,11 +57,16 @@ public class AddMemberDialog extends JDialog {
 			public void actionPerformed(ActionEvent e) {
 				Member m=validateInputs();
 				if( m.equals(null)){
-					messageLabel.setText("Invalid inputs");
+					//messageLabel.setText("Invalid inputs");
 				}
 				else {
 					Common.addMember(m);
-					messageLabel.setText("Member "+m.getName()+" added");
+					//messageLabel.setText("Member "+m.getName()+" added");
+					dispose();
+					new AddMemberDialog("Member "+m.getName()+" added");
+					/* utilDateModel=new UtilDateModel();
+					dobPanel = new JDatePanelImpl(utilDateModel);
+					*/
 				}
 				
 			}
@@ -93,6 +99,10 @@ public class AddMemberDialog extends JDialog {
 		Date dob=(Date)utilDateModel.getValue();
 		Center center=(Center)centerComboBox.getSelectedItem();
 		String memberCode=memberCodeTextField.getText();
+		if(!(Common.getMember(memberCode)==null)){
+			messageLabel.setText("Unique barcode required. "+memberCode+" already in use.");
+			return null;
+		}
 		if(firstName.length()>0&&surname.length()>0&&memberCode.length()==8&&!dob.equals(null)&&!center.equals(null)){
 			Member m=new Member();
 			m.setFirstName(firstName);
