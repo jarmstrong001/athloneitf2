@@ -8,6 +8,7 @@ import java.util.*;
 
 import javax.swing.JList;
 import javax.swing.ListModel;
+import javax.swing.table.TableModel;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -51,10 +52,48 @@ public class Common {
 		Query memberQuery = session.createQuery("FROM Member "+
 				"WHERE MemberBarCode="+barCode);
 				List<Member> member=memberQuery.list();
-				System.out.println(member.size()+" records");
+				//System.out.println(member.size()+" records");
 				session.getTransaction().commit();
 				if(member.size()>0) returnMember=member.get(0);
 				return returnMember;		
+	}
+	
+	public static Member getMemberFromName(String name){
+		String[] str_array = name.split(" ");
+		String firstName = str_array[0]; 
+		String surname = str_array[1];
+		Member returnMember=null;
+		Session session=startSession();
+		Query memberQuery=session.createQuery("FROM Member "+
+				"WHERE firstName='"+firstName+"' AND surname='"+surname+"'");
+		List<Member> member=memberQuery.list();
+		session.getTransaction().commit();
+		if(member.size()>0) returnMember=member.get(0);
+		return returnMember;				
+	}
+	
+	public static TableModel getPaymentsForMember(Member m){
+		
+		List<Payment> paymentList=new ArrayList<Payment>();
+		Session session=startSession();
+		Query memberPaymentQuery = session.createQuery("FROM Payment WHERE memberCode="+m.getMemberCode());
+		paymentList=memberPaymentQuery.list();
+		session.getTransaction().commit();
+		//System.out.println("*******************\nPayment List Size="+paymentList.size());
+		TableModel returnTableModel=new MemberPaymentTableModel(paymentList);
+		return returnTableModel;
+		
+	}
+	
+	public static String getPaymentTypeName(int paymentTypeId){
+		String returnString="null";
+		List<PaymentType> paymentTypeList=new ArrayList<PaymentType>();
+		Session session=startSession();
+		Query paymentTypeQuery = session.createQuery("FROM PaymentType WHERE paymentTypeId="+paymentTypeId);
+				paymentTypeList=paymentTypeQuery.list();
+				session.getTransaction().commit();	
+				if(paymentTypeList.size()>0) returnString=paymentTypeList.get(0).getPaymentTypeName();
+		return returnString;
 	}
 	
 	public static List<Member> getMemberList(){
@@ -62,7 +101,7 @@ public class Common {
 		Session session=startSession();
 		Query memberQuery = session.createQuery("FROM Member ");
 				memberList=memberQuery.list();
-				System.out.println("MemberList retrieved with "+memberList.size()+" records");
+				//System.out.println("MemberList retrieved with "+memberList.size()+" records");
 				session.getTransaction().commit();			
 		return memberList;
 	}
