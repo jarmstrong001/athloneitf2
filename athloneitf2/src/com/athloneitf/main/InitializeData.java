@@ -111,6 +111,7 @@ public class InitializeData {
     	PaymentType pt13=new PaymentType();
     	PaymentType pt14=new PaymentType();
     	PaymentType pt15=new PaymentType();
+    	PaymentType pt16=new PaymentType();
     	
     	ClassType tkdCt=ClassType.TAEKWONDO;
     	ClassType skyCt=ClassType.SKYBOXING;
@@ -221,6 +222,12 @@ public class InitializeData {
     	pt12.setClassType(kickCt);
     	session.save(pt12);
     	    	
+    	pt16.setPaymentTypeId(14);
+    	pt16.setPaymentPeriod(PaymentPeriod.MONTH);
+    	pt16.setPaymentAmount(50.00);
+    	pt16.setPaymentTypeName("Skyboxing Month");
+    	pt16.setClassType(skyCt);
+    	session.save(pt16);
     }
     
     private static void setupPayments(Session session) throws ParseException{

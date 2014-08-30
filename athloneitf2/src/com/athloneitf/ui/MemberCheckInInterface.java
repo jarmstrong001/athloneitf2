@@ -31,6 +31,7 @@ public class MemberCheckInInterface extends JFrame {
 	private final JLabel resultLabel = new JLabel("                ");
 	private final JTextArea paymentTextArea = new JTextArea(5,25);
 	private final Timer paymentAreaTimer;
+	private final ClassType globalClassType;
 	
 	private ActionListener updateClockAction = new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
@@ -67,6 +68,7 @@ public class MemberCheckInInterface extends JFrame {
 	};
 
 	public MemberCheckInInterface(ClassType classType) {
+		globalClassType=classType;
 		setIconImage(CommonUI.getIcon(classType));
 		instructor = Common.getLoggedInInstructor();
 		setTitle("Athlone ITF - instructor " + instructor.getName());
@@ -88,7 +90,7 @@ public class MemberCheckInInterface extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 				if(e.getClickCount()==2) {
 					Member selectedMember=(Member)memberList.getSelectedValue();
-					PaymentDialog pd=new PaymentDialog(selectedMember,ClassType.TAEKWONDO);
+					PaymentDialog pd=new PaymentDialog(selectedMember,globalClassType);
 					pd.setVisible(true);
 					MemberCheckInInterface.this.dispose();
 				}
@@ -168,7 +170,7 @@ public class MemberCheckInInterface extends JFrame {
 	
 	private void showPayment(Member member){
 		paymentTextArea.setText(parseStringArrayList(Common
-				.getPaymentStatusTkd(member)));
+				.getPaymentStatus(member,globalClassType)));
 		paymentAreaTimer.start();
 	}
 

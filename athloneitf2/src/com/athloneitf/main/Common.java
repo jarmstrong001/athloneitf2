@@ -85,6 +85,20 @@ public class Common {
 		
 	}
 	
+public static TableModel getPaymentsForDate(Date d){
+		
+		List<Payment> paymentList=new ArrayList<Payment>();
+		Session session=startSession();
+		Query datePaymentQuery = session.createQuery("FROM Payment WHERE paymentDate between '"+ new java.sql.Date(d.getTime())+
+				"' AND '"+new java.sql.Date(d.getTime())+" 23:59:59'");
+		paymentList=datePaymentQuery.list();
+		session.getTransaction().commit();
+		//System.out.println("*******************\nPayment List Size="+paymentList.size());
+		TableModel returnTableModel=new DailyPaymentTableModel(paymentList);
+		return returnTableModel;
+		
+	}
+	
 	public static String getPaymentTypeName(int paymentTypeId){
 		String returnString="null";
 		List<PaymentType> paymentTypeList=new ArrayList<PaymentType>();
@@ -215,10 +229,10 @@ public class Common {
 				+"memberCode="+member.getMemberCode()+" AND paymentTypeId=4"
 				+" ORDER BY paymentTo DESC").list();
 		session.getTransaction().commit();
-		System.out.println("PaymentListSize="+paymentList.size());
+		//System.out.println("PaymentListSize="+paymentList.size());
 		if(paymentList.size()>0){
 			Payment p=paymentList.get(0);
-			System.out.println("Payment "+p.getPaymentId()+" "+p);
+			//System.out.println("Payment "+p.getPaymentId()+" "+p);
 			Calendar today=Calendar.getInstance();
 			Calendar paymentTo=new GregorianCalendar();
 			paymentTo.setTime(p.getPaymentTo());
@@ -226,7 +240,7 @@ public class Common {
 					"Insurance not up to date. \nLast paid up to "+dobDateFormat.format(p.getPaymentTo()));
 		}else paymentDefaults.add("Insurance not paid");
 		
-		System.out.println(member.getName()+"AGE (at term start)="+member.getAgeAtTermStart());
+		//System.out.println(member.getName()+"AGE (at term start)="+member.getAgeAtTermStart());
 		if(member.getAgeAtTermStart()>16){
 			Session session2=startSession();
 		// Check Adult IUTF is paid
@@ -234,7 +248,7 @@ public class Common {
 				+"memberCode="+member.getMemberCode()+" AND paymentTypeId=3"
 				+" ORDER BY paymentTo DESC").list();
 		session2.getTransaction().commit();
-		System.out.println("PaymentListSize="+paymentListIUTF.size());
+		//System.out.println("PaymentListSize="+paymentListIUTF.size());
 		if(paymentListIUTF.size()>0){
 			Payment p=paymentListIUTF.get(0);
 			System.out.println("Payment "+p.getPaymentId()+" "+p);
@@ -252,7 +266,7 @@ public class Common {
 						+"memberCode="+member.getMemberCode()+" AND paymentTypeId=5"
 						+" ORDER BY paymentTo DESC").list();
 				session2.getTransaction().commit();
-				System.out.println("PaymentListSize="+paymentListIUTFChild.size());
+				//System.out.println("PaymentListSize="+paymentListIUTFChild.size());
 				if(paymentListIUTFChild.size()>0){
 					Payment p=paymentListIUTFChild.get(0);
 					System.out.println("Payment "+p.getPaymentId()+" "+p);
@@ -270,10 +284,10 @@ public class Common {
 				+"memberCode="+member.getMemberCode()+" AND (paymentTypeId=1 OR paymentTypeId=2 OR paymentTypeId=6 OR paymentTypeId=7)"
 				+" ORDER BY paymentTo DESC").list();
 		session3.getTransaction().commit();
-		System.out.println("PaymentListSize="+paymentListTKDFees.size());
+		//System.out.println("PaymentListSize="+paymentListTKDFees.size());
 		if(paymentListTKDFees.size()>0){
 			Payment p=paymentListTKDFees.get(0);
-			System.out.println("Payment "+p.getPaymentId()+" "+p);
+			//System.out.println("Payment "+p.getPaymentId()+" "+p);
 			Calendar today=Calendar.getInstance();
 			Calendar paymentTo=new GregorianCalendar();
 			paymentTo.setTime(p.getPaymentTo());
@@ -289,13 +303,126 @@ public class Common {
 		
 	}
 	
-	public static ArrayList<String> getPaymentStatusSkyboxing(Member member){
+	public static ArrayList<String> getPaymentStatus(Member member,ClassType classType){
+		if (classType.equals(classType.SKYBOXING)) return getPaymentStatusSkyboxing(member);
+		if (classType.equals(classType.TAEKWONDO)) return getPaymentStatusTkd(member);
+		if (classType.equals(classType.KICKBOXING)) return getPaymentStatusKickboxing(member);
 		return new ArrayList<String>();
 	}
 	
-	public static ArrayList<String> getPaymentStatusKickboxing(Member member){
-		return new ArrayList<String>();
+	public static ArrayList<String> getPaymentStatusSkyboxing(Member member) {
+		ArrayList<String> paymentDefaults = new ArrayList<String>();
+		Session session3 = startSession();
+		// Check when Skyboxing fees have been paid up until
+		List<Payment> paymentListSkyboxingFees = session3.createQuery(
+				"From Payment WHERE " + "memberCode=" + member.getMemberCode()
+						+ " AND paymentTypeId=14"
+						+ " ORDER BY paymentTo DESC").list();
+		session3.getTransaction().commit();
+		System.out.println("PaymentListSize=" + paymentListSkyboxingFees.size());
+		if (paymentListSkyboxingFees.size() > 0) {
+			Payment p = paymentListSkyboxingFees.get(0);
+			System.out.println("Payment " + p.getPaymentId() + " " + p);
+			Calendar today = Calendar.getInstance();
+			Calendar paymentTo = new GregorianCalendar();
+			paymentTo.setTime(p.getPaymentTo());
+			if (paymentTo.before(today))
+				paymentDefaults
+						.add("Skyboxing fees not up to date. \nLast paid up to "
+								+ dobDateFormat.format(p.getPaymentTo()));
+		} else
+			paymentDefaults.add("Skyboxing fees not paid");
+		if(paymentDefaults.size()==0) paymentDefaults.add("Payment up to date");
+		for(String s:paymentDefaults){ System.out.println(s);}
+		return paymentDefaults;
 	}
+
+	public static ArrayList<String> getPaymentStatusKickboxing(Member member){
+		ArrayList<String> paymentDefaults=new ArrayList<String>();
+		Calendar c=Calendar.getInstance();
+		Calendar minusYear=Calendar.getInstance();
+		minusYear.add(Calendar.YEAR,-1);
+		
+		Session session=startSession();
+		// Check insurance is paid
+		List<Payment> paymentList=session.createQuery("From Payment WHERE "
+				+"memberCode="+member.getMemberCode()+" AND paymentTypeId=24"
+				+" ORDER BY paymentTo DESC").list();
+		session.getTransaction().commit();
+		//System.out.println("PaymentListSize="+paymentList.size());
+		if(paymentList.size()>0){
+			Payment p=paymentList.get(0);
+			//System.out.println("Payment "+p.getPaymentId()+" "+p);
+			Calendar today=Calendar.getInstance();
+			Calendar paymentTo=new GregorianCalendar();
+			paymentTo.setTime(p.getPaymentTo());
+			if(paymentTo.before(today)) paymentDefaults.add(
+					"Kickboxing insurance not up to date. \nLast paid up to "+dobDateFormat.format(p.getPaymentTo()));
+		}else paymentDefaults.add("Kickboxing insurance not paid");
+		
+		//System.out.println(member.getName()+"AGE (at term start)="+member.getAgeAtTermStart());
+		//if(member.getAgeAtTermStart()>16){
+			Session session2=startSession();
+		// Check Adult IUTF is paid
+		List<Payment> paymentListIUTF=session2.createQuery("From Payment WHERE "
+				+"memberCode="+member.getMemberCode()+" AND paymentTypeId=22"
+				+" ORDER BY paymentTo DESC").list();
+		session2.getTransaction().commit();
+		System.out.println("PaymentListSize="+paymentListIUTF.size());
+		if(paymentListIUTF.size()>0){
+			Payment p=paymentListIUTF.get(0);
+			System.out.println("Payment "+p.getPaymentId()+" "+p);
+			Calendar today=Calendar.getInstance();
+			Calendar paymentTo=new GregorianCalendar();
+			paymentTo.setTime(p.getPaymentTo());
+			if(paymentTo.before(today)) paymentDefaults.add(
+					"WKU membership not up to date. \nLast paid up to "+dobDateFormat.format(p.getPaymentTo()));
+		}else paymentDefaults.add("WKU membership not paid");
+		//}
+		/*else{
+			Session session2=startSession();
+		// Check Child IUTF is paid
+				List<Payment> paymentListIUTFChild=session2.createQuery("From Payment WHERE "
+						+"memberCode="+member.getMemberCode()+" AND paymentTypeId=5"
+						+" ORDER BY paymentTo DESC").list();
+				session2.getTransaction().commit();
+				System.out.println("PaymentListSize="+paymentListIUTFChild.size());
+				if(paymentListIUTFChild.size()>0){
+					Payment p=paymentListIUTFChild.get(0);
+					System.out.println("Payment "+p.getPaymentId()+" "+p);
+					Calendar today=Calendar.getInstance();
+					Calendar paymentTo=new GregorianCalendar();
+					paymentTo.setTime(p.getPaymentTo());
+					if(paymentTo.before(today)) paymentDefaults.add(
+							"Child IUTF membership not up to date. \nLast paid up to "+dobDateFormat.format(p.getPaymentTo()));
+				}else paymentDefaults.add("Child IUTF membership not paid");
+		}*/
+		
+		Session session3=startSession();
+		// Check when TKD fees have been paid up until
+		List<Payment> paymentListTKDFees=session3.createQuery("From Payment WHERE "
+				+"memberCode="+member.getMemberCode()+" AND (paymentTypeId=20 OR paymentTypeId=21)"
+				+" ORDER BY paymentTo DESC").list();
+		session3.getTransaction().commit();
+		System.out.println("PaymentListSize="+paymentListTKDFees.size());
+		if(paymentListTKDFees.size()>0){
+			Payment p=paymentListTKDFees.get(0);
+			System.out.println("Payment "+p.getPaymentId()+" "+p);
+			Calendar today=Calendar.getInstance();
+			Calendar paymentTo=new GregorianCalendar();
+			paymentTo.setTime(p.getPaymentTo());
+			if(paymentTo.before(today)) paymentDefaults.add(
+					"Kickboxing fees not up to date. \nLast paid up to "+dobDateFormat.format(p.getPaymentTo()));
+		}else paymentDefaults.add("Kickboxing fees not paid");
+		
+		
+		
+		if(paymentDefaults.size()==0) paymentDefaults.add("Payment up to date");
+		for(String s:paymentDefaults){ System.out.println(s);}
+		return paymentDefaults;
+	}
+	
+	
 	
 	
 	public static String getDayOfWeek(int i){
@@ -314,8 +441,8 @@ public class Common {
 	public static List<PaymentType> getPaymentTypes(ClassType ct){
 		Session session=startSession();
 		List<PaymentType> paymentTypeList=session.createQuery("From PaymentType WHERE "
-				+"classType='"+ct.name()
-				+"' ORDER BY paymentAmount DESC").list();
+				+"classType="+ct.ordinal()
+				+" ORDER BY paymentAmount DESC").list();
 		session.getTransaction().commit();
 		System.out.println("PaymentListSize="+paymentTypeList.size());
 		return paymentTypeList;

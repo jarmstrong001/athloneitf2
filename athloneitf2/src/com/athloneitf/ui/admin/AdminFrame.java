@@ -15,6 +15,7 @@ public class AdminFrame extends JFrame {
 
 	private final JButton addMemberButton=new JButton("Add Member");
 	private final JButton getMemberPaymentsButton=new JButton("Get Member Payments");
+	private final JButton getDailyPaymentsButton=new JButton("Get Daily Payments");
 	private final JPanel adminOptionsPanel=new JPanel();
 	private final JLabel messageLabel=new JLabel();
 	private final JButton exitButton=new JButton("Exit");
@@ -35,6 +36,13 @@ public class AdminFrame extends JFrame {
 				GetMemberPaymentsDialog am=new GetMemberPaymentsDialog();
 			}
 		});
+		
+		getDailyPaymentsButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+				GetDailyPaymentsDialog am=new GetDailyPaymentsDialog();
+			}
+		});
 		exitButton.addActionListener(new ActionListener() {
 
 			@Override
@@ -48,6 +56,7 @@ public class AdminFrame extends JFrame {
 		adminOptionsPanel.add(messageLabel,BorderLayout.NORTH);
 		adminOptionsPanel.add(addMemberButton,BorderLayout.CENTER);
 		adminOptionsPanel.add(getMemberPaymentsButton);
+		adminOptionsPanel.add(getDailyPaymentsButton);
 		adminOptionsPanel.add(exitButton,BorderLayout.SOUTH);
 		
 		this.add(adminOptionsPanel);

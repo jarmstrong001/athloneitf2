@@ -6,7 +6,7 @@ public class Audio {
 	
 	private static final String scanInFile="chime_up.wav";
 	private static final String scanOutFile="chime_down.wav";
-	private static boolean audio=false;
+	private static boolean audio=true;
 	
 	public static boolean isAudio() {
 		return audio;
@@ -20,8 +20,10 @@ public class Audio {
 			  throws Exception
 			  {
 			    // open the sound file as a Java input stream
-			    InputStream in = new FileInputStream("audio/"+scanInFile);
+			   // InputStream in = new FileInputStream("audio/"+scanInFile);
 
+			    InputStream in = Audio.class.getClassLoader().getResourceAsStream("audio/"+scanInFile);
+			    
 			    // create an audiostream from the inputstream
 			    AudioStream audioStream = new AudioStream(in);
 
@@ -33,8 +35,9 @@ public class Audio {
 			  throws Exception
 			  {
 			    // open the sound file as a Java input stream
-			    InputStream in = new FileInputStream("audio/"+scanOutFile);
+			    //InputStream in = new FileInputStream("audio/"+scanOutFile);
 
+			    InputStream in = Audio.class.getClassLoader().getResourceAsStream("audio/"+scanOutFile);
 			    // create an audiostream from the inputstream
 			    AudioStream audioStream = new AudioStream(in);
 
