@@ -28,6 +28,7 @@ import net.sourceforge.jdatepicker.impl.*;
 
 import com.athloneitf.datatype.*;
 import com.athloneitf.main.Common;
+import com.athloneitf.ui.admin.AddMemberDialog;
 
 public class PaymentDialog extends JDialog {
 
@@ -51,7 +52,8 @@ public class PaymentDialog extends JDialog {
 	private boolean dateSelected = false;
 	private boolean paymentAmountSelected = false;
 
-	public PaymentDialog(Member member, ClassType ct) {
+	public PaymentDialog(Member member, ClassType ct,String message) {
+		messageTextArea.setText(message);
 		globalMember = member;
 		globalClassType = ct;
 		makePaymentButton = new JButton("Make Payment");
@@ -63,7 +65,8 @@ public class PaymentDialog extends JDialog {
 						globalMember, (Date) utilDateModel.getValue(),
 						getPaymentAmount());
 				updatePaymentStatus(globalMember, globalClassType);
-				messageTextArea.setText("Payment made for "
+				dispose();
+				new PaymentDialog(globalMember,globalClassType,"Payment made for "
 						+ globalMember.getName()
 						+ "\n of "
 						+ getPaymentAmount()

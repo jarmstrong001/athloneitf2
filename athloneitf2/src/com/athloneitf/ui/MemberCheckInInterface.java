@@ -32,6 +32,7 @@ public class MemberCheckInInterface extends JFrame {
 	private final JTextArea paymentTextArea = new JTextArea(5,25);
 	private final Timer paymentAreaTimer;
 	private final ClassType globalClassType;
+
 	
 	private ActionListener updateClockAction = new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
@@ -42,6 +43,7 @@ public class MemberCheckInInterface extends JFrame {
 	private ActionListener blankPaymentTextAreaAction = new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
 			paymentTextArea.setText("");
+			paymentTextArea.setEnabled(false);
 		}
 	};
 	
@@ -90,7 +92,7 @@ public class MemberCheckInInterface extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 				if(e.getClickCount()==2) {
 					Member selectedMember=(Member)memberList.getSelectedValue();
-					PaymentDialog pd=new PaymentDialog(selectedMember,globalClassType);
+					PaymentDialog pd=new PaymentDialog(selectedMember,globalClassType,"");
 					pd.setVisible(true);
 					MemberCheckInInterface.this.dispose();
 				}
@@ -100,8 +102,8 @@ public class MemberCheckInInterface extends JFrame {
 		memberList.addMouseListener(mouseListenerDoubleClick);
 		
 		updateMemberList();
-		
-		listPanel.add(memberList,BorderLayout.CENTER);
+		JScrollPane memberListScrollPane=new JScrollPane(memberList);
+		listPanel.add(memberListScrollPane,BorderLayout.CENTER);
 		memberList.setPreferredSize(new Dimension(150,200));
 		listPanel.add(scanOutAllButton,BorderLayout.SOUTH);
 		scanOutAllButton.addActionListener(scanOutAllAction);
@@ -109,6 +111,7 @@ public class MemberCheckInInterface extends JFrame {
 		loginPanel.add(scanInLabel);
 		loginPanel.add(scanInTextField);
 		loginPanel.add(resultLabel); 
+		paymentTextArea.setEnabled(false);
 		loginPanel.add(paymentTextArea);
 		endClassButton.addActionListener(endClassAction);
 		loginPanel.add(endClassButton);
@@ -146,10 +149,11 @@ public class MemberCheckInInterface extends JFrame {
 						resultLabel.setText(member.getName()
 								+ " scanned into class at "
 								+ Common.timeFormat.format(new Date()));
-						System.out.println("Payment Status:"
+						/*System.out.println("Payment Status:"
 								+ parseStringArrayList(Common
-										.getPaymentStatusTkd(member)));
+										.getPaymentStatusTkd(member)));*/
 						showPayment(member);
+						
 						updateMemberList();
 					}
 				} else {
@@ -171,6 +175,7 @@ public class MemberCheckInInterface extends JFrame {
 	private void showPayment(Member member){
 		paymentTextArea.setText(parseStringArrayList(Common
 				.getPaymentStatus(member,globalClassType)));
+		paymentTextArea.setEnabled(true);
 		paymentAreaTimer.start();
 	}
 
@@ -179,7 +184,7 @@ public class MemberCheckInInterface extends JFrame {
 		for (String s : input) {
 			returnValue+=(s + "\n");
 		}
-		System.out.println(returnValue + " payment info");
+		//System.out.println(returnValue + " payment info");
 		return returnValue;
 	}
 

@@ -219,6 +219,7 @@ public static TableModel getPaymentsForDate(Date d){
 	
 	public static ArrayList<String> getPaymentStatusTkd(Member member){
 		ArrayList<String> paymentDefaults=new ArrayList<String>();
+		if(member==null){return paymentDefaults;}
 		Calendar c=Calendar.getInstance();
 		Calendar minusYear=Calendar.getInstance();
 		minusYear.add(Calendar.YEAR,-1);

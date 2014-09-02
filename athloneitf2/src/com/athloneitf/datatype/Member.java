@@ -26,9 +26,25 @@ public class Member {
 	private boolean scannedInStatus;
 	@Column(name="Center")
 	private Center center;
+	@Column(name="Email")
+	private String email;
+	@Column(name="PhoneNumber")
+	private String phoneNumber;
 	
 		
 	
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
 	public Center getCenter() {
 		return center;
 	}
@@ -97,4 +113,12 @@ public class Member {
 		Years age=Years.yearsBetween(birthdate,termStartDate);
 		return age.getYears();
 	}
+	
+	 public int compareTo(Member s){
+		 if(this.isInstructor()&&!s.isInstructor()) return 1;
+		 else if(this.isInstructor()==false&&s.isInstructor()) return -1;
+		 else{
+	        return this.getSurname().compareTo(s.getSurname());
+		 }
+	    }
 }

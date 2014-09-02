@@ -12,8 +12,9 @@ public class MemberPaymentTableModel extends AbstractTableModel {
 	public Object[][] rowData;
 	
 	public MemberPaymentTableModel(List<Payment> payments){
-		rowData=new Object[payments.size()][3];
+		rowData=new Object[payments.size()+1][3];
 		int i=0;
+		double paymentAmountTotal=0.0;
 		for(Payment p:payments){
 			String paymentName=Common.getPaymentTypeName(p.getPaymentTypeId());
 			String paymentAmount="€"+p.getPaymentAmount();
@@ -21,7 +22,10 @@ public class MemberPaymentTableModel extends AbstractTableModel {
 			//System.out.println("PN="+paymentName+"\nPA"+paymentAmount+"\nPD"+paymentDate);
 			rowData[i]= new String[]{paymentName,paymentAmount,paymentDate};
 			i++;
+			paymentAmountTotal+=p.getPaymentAmount();
 		}
+		rowData[payments.size()]=new String[]{"","€"+paymentAmountTotal,""};
+
 	}
 	
 	
