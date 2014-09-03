@@ -244,7 +244,7 @@ public static TableModel getPaymentsForDate(Date d){
 		}else paymentDefaults.add("Insurance not paid");
 		
 		//System.out.println(member.getName()+"AGE (at term start)="+member.getAgeAtTermStart());
-		if(member.getAgeAtTermStart()>16){
+		if(member.getAgeAtTermStart()>13){
 			Session session2=startSession();
 		// Check Adult IUTF is paid
 		List<Payment> paymentListIUTF=session2.createQuery("From Payment WHERE "

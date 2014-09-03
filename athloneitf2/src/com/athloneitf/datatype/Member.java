@@ -10,7 +10,7 @@ import org.joda.time.*;
 import com.athloneitf.main.Common;
 
 @Entity
-public class Member {
+public class Member implements Comparable<Member> {
 	@Column(name="MemberFirstName")
 	private String firstName;
 	@Column(name="MemberSurname")
@@ -115,8 +115,8 @@ public class Member {
 	}
 	
 	 public int compareTo(Member s){
-		 if(this.isInstructor()&&!s.isInstructor()) return 1;
-		 else if(this.isInstructor()==false&&s.isInstructor()) return -1;
+		 if(this.isInstructor()&&!s.isInstructor()) return -1;
+		 else if(this.isInstructor()==false&&s.isInstructor()) return 1;
 		 else{
 	        return this.getSurname().compareTo(s.getSurname());
 		 }

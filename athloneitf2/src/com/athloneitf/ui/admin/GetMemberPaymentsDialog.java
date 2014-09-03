@@ -10,6 +10,7 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 
@@ -56,9 +57,11 @@ public class GetMemberPaymentsDialog extends JDialog {
 		mainPanel.add(exitButton);
 		
 		this.add(mainPanel,BorderLayout.NORTH);
-		paymentsTable.setPreferredSize(new Dimension(400,100));
-		paymentsPanel.add(paymentsTable);
-		this.add(paymentsPanel,BorderLayout.CENTER);
+		paymentsTable.setSize(new Dimension(600,300));
+		JScrollPane tableScrollPane=new JScrollPane(paymentsTable);
+		tableScrollPane.setSize(new Dimension(600,300));
+		tableScrollPane.setLocation(100,100);
+		this.add(tableScrollPane,BorderLayout.CENTER);
 		this.setSize(CommonUI.FULLSCREEN);
 		this.setVisible(true);
 	}

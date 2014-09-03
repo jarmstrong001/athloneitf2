@@ -7,7 +7,9 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -169,7 +171,10 @@ public class MemberCheckInInterface extends JFrame {
 	}
 	
 	private void updateMemberList(){
-		memberList.setListData(Common.getListOfScannedInMembers().toArray());
+		List<Member> tempList=Common.getListOfScannedInMembers();
+		Collections.sort((List<Member>)tempList);
+		memberList.setListData(tempList.toArray());
+		
 	}
 	
 	private void showPayment(Member member){

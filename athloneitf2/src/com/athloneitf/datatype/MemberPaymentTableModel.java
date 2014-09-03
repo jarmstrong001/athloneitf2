@@ -28,6 +28,10 @@ public class MemberPaymentTableModel extends AbstractTableModel {
 
 	}
 	
+	public String getColumnName(int i){
+		return columnNames[i];
+	}
+	
 	
 	@Override
 	public int getColumnCount() {
