@@ -24,6 +24,8 @@ public class GetMemberPaymentsDialog extends JDialog {
 	private final JButton getPaymentsButton=new JButton("Get Payments");
 	private final JTextField memberNameField=new JTextField(26);
 	private final JLabel memberNameLabel=new JLabel("Member Name");
+	private final JTextField memberCodeField=new JTextField(8);
+	private final JLabel memberCodeLabel=new JLabel("Member Barcode");
 	private final JPanel paymentsPanel=new JPanel();
 	private final JTable paymentsTable=new JTable();
 	
@@ -35,8 +37,14 @@ public class GetMemberPaymentsDialog extends JDialog {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				paymentsTable.setModel(Common.getPaymentsForMember(Common.getMemberFromName(memberNameField.getText())));
-				
+				if(memberNameField.getText().equals("")){
+					paymentsTable.setModel(Common.getPaymentsForMember(Common.getMember(memberCodeField.getText())));
+					memberCodeField.setText("");
+				}
+				else{
+					paymentsTable.setModel(Common.getPaymentsForMember(Common.getMemberFromName(memberNameField.getText())));
+				    memberNameField.setText("");
+				}
 			}
 			
 		});
@@ -53,6 +61,8 @@ public class GetMemberPaymentsDialog extends JDialog {
 		});
 		mainPanel.add(memberNameLabel);
 		mainPanel.add(memberNameField);
+		mainPanel.add(memberCodeLabel);
+		mainPanel.add(memberCodeField);
 		mainPanel.add(getPaymentsButton);
 		mainPanel.add(exitButton);
 		

@@ -2,6 +2,8 @@ package com.athloneitf.ui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -27,7 +29,9 @@ public class MemberCheckInInterface extends JFrame {
 	private final JButton endClassButton=new JButton("Leave Class Checkin Screen");
 	private final JTextField scanInTextField = new JTextField(10);
 	private final JPanel loginPanel = new JPanel();
-	private final JPanel listPanel = new JPanel(new BorderLayout());
+	private final JPanel listPanel = new JPanel();
+	private final JPanel rightPanel =new JPanel();
+	private final JPanel leftPanel = new JPanel();
 	private final JLabel scanInLabel = new JLabel(
 			"Enter barcode to scan into class");	
 	private final JLabel resultLabel = new JLabel("                ");
@@ -105,31 +109,44 @@ public class MemberCheckInInterface extends JFrame {
 		
 		updateMemberList();
 		JScrollPane memberListScrollPane=new JScrollPane(memberList);
-		listPanel.add(memberListScrollPane,BorderLayout.CENTER);
-		memberList.setPreferredSize(new Dimension(150,200));
+		listPanel.setLayout(new BoxLayout(listPanel,BoxLayout.PAGE_AXIS));
+		listPanel.setSize(new Dimension(350,600));
+		listPanel.add(memberListScrollPane);
+		memberList.setMinimumSize(new Dimension((this.getHeight()-80),this.getWidth()-400));
 		listPanel.add(scanOutAllButton,BorderLayout.SOUTH);
 		scanOutAllButton.addActionListener(scanOutAllAction);
-		scanOutAllButton.setSize(new Dimension(150,30));
+		scanOutAllButton.setSize(new Dimension(300,30));
+		clock = new JLabel(new Date().toString());
+		listPanel.add(clock);
+		loginPanel.setLayout(new BoxLayout(loginPanel,BoxLayout.PAGE_AXIS));
+
+		scanInTextField.setPreferredSize(new Dimension(200,50));
+		scanInLabel.setPreferredSize(new Dimension(200,50));
 		loginPanel.add(scanInLabel);
 		loginPanel.add(scanInTextField);
+		resultLabel.setPreferredSize(new Dimension(350,50));
 		loginPanel.add(resultLabel); 
 		paymentTextArea.setEnabled(false);
+		paymentTextArea.setPreferredSize(new Dimension(350,120));
+		/*
+		 *  paymentTextArea.setMaximumSize(new Dimension(350,150));
+		 *	paymentTextArea.setMinimumSize(new Dimension(350,150));
+		 */
 		loginPanel.add(paymentTextArea);
+		
 		endClassButton.addActionListener(endClassAction);
 		loginPanel.add(endClassButton);
-		add(loginPanel, BorderLayout.CENTER);
-		add(listPanel, BorderLayout.EAST);
-		File file;
-		System.out.println("ClassType=" + classType.name());
-
-		
 		JLabel picLabel = new JLabel(new ImageIcon(CommonUI.getPic(classType)));
-		add(picLabel, BorderLayout.NORTH);
-
-		clock = new JLabel(new Date().toString());
-
-		add(clock, BorderLayout.SOUTH);
-
+		picLabel.setPreferredSize(new Dimension(800,800));
+		leftPanel.setLayout(new BoxLayout(leftPanel,BoxLayout.PAGE_AXIS));
+		leftPanel.add(picLabel);
+		leftPanel.add(loginPanel);
+		rightPanel.add(listPanel);
+		//System.out.println("ClassType=" + classType.name());
+		this.getContentPane().setLayout(new GridLayout(1,2));
+		add(leftPanel);
+		add(rightPanel);
+		this.setSize(CommonUI.FULLSCREEN);
 		setVisible(true);
 
 		scanInTextField.requestFocusInWindow();
