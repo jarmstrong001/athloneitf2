@@ -8,23 +8,24 @@ import com.athloneitf.main.Common;
 
 public class MemberPaymentTableModel extends AbstractTableModel {
 
-	private String[] columnNames={"Payment Type","Payment Amount","Payment Date"};
+	private String[] columnNames={"Payment Type","Payment Amount","Payment Date","Payment Valid To"};
 	public Object[][] rowData;
 	
 	public MemberPaymentTableModel(List<Payment> payments){
-		rowData=new Object[payments.size()+1][3];
+		rowData=new Object[payments.size()+1][4];
 		int i=0;
 		double paymentAmountTotal=0.0;
 		for(Payment p:payments){
 			String paymentName=Common.getPaymentTypeName(p.getPaymentTypeId());
 			String paymentAmount="€"+p.getPaymentAmount();
 			String paymentDate=Common.dobDateFormat.format(p.getPaymentDate());
+			String paymentValidTo=Common.dobDateFormat.format(p.getPaymentTo());
 			//System.out.println("PN="+paymentName+"\nPA"+paymentAmount+"\nPD"+paymentDate);
-			rowData[i]= new String[]{paymentName,paymentAmount,paymentDate};
+			rowData[i]= new String[]{paymentName,paymentAmount,paymentDate,paymentValidTo};
 			i++;
 			paymentAmountTotal+=p.getPaymentAmount();
 		}
-		rowData[payments.size()]=new String[]{"","€"+paymentAmountTotal,""};
+		rowData[payments.size()]=new String[]{"","€"+paymentAmountTotal,"",""};
 
 	}
 	
