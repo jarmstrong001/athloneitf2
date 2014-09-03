@@ -32,11 +32,16 @@ public class AddMemberDialog extends JDialog {
 	private JDatePanelImpl dobPanel=new JDatePanelImpl(utilDateModel);
 	private final JButton addMemberButton=new JButton("Add Member");
 	private final JButton exitButton=new JButton("Exit");
-	private final JLabel messageLabel=new JLabel("");
+	private final JTextField messageLabel=new JTextField(20);
 	private final JPanel mainPanel=new JPanel(new BorderLayout());
 	private final JPanel formPanel=new JPanel(new GridLayout(4,2));
 	private final JPanel buttonPanel=new JPanel(new BorderLayout());
 	private final JPanel datePanel=new JPanel();
+	private final JPanel centrePanel=new JPanel();
+	private final JLabel emailLabel=new JLabel("Email");
+	private final JTextField emailTextField=new JTextField(30);
+	private final JLabel phoneNumberLabel=new JLabel("Phone Number");
+	private final JTextField phoneNumberTextField=new JTextField(20);
 	
 	public AddMemberDialog(String message){
 		messageLabel.setText(message);
@@ -56,7 +61,7 @@ public class AddMemberDialog extends JDialog {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Member m=validateInputs();
-				if( m.equals(null)){
+				if(m==(null)){
 					//messageLabel.setText("Invalid inputs");
 				}
 				else {
@@ -72,6 +77,7 @@ public class AddMemberDialog extends JDialog {
 			}
 			
 		});
+		formPanel.setLayout(new GridLayout(6,2));
 		formPanel.add(firstNameLabel);
 		formPanel.add(firstNameTextField);
 		formPanel.add(surnameLabel);
@@ -80,10 +86,17 @@ public class AddMemberDialog extends JDialog {
 		formPanel.add(centerComboBox);
 		formPanel.add(memberCodeLabel);
 		formPanel.add(memberCodeTextField);
-		mainPanel.add(formPanel,BorderLayout.WEST);
+		formPanel.add(emailLabel);
+		formPanel.add(emailTextField);
+		formPanel.add(phoneNumberLabel);
+		formPanel.add(phoneNumberTextField);
+		centrePanel.setLayout(new GridLayout(1,2));
+		centrePanel.add(formPanel);
 		datePanel.add(dobPanel);
-		mainPanel.add(dobPanel,BorderLayout.CENTER);
-		buttonPanel.add(messageLabel,BorderLayout.NORTH);
+		//mainPanel.add(dobPanel,BorderLayout.CENTER);
+		centrePanel.add(datePanel);
+		mainPanel.add(centrePanel,BorderLayout.CENTER);
+		buttonPanel.add(messageLabel,BorderLayout.CENTER);
 		buttonPanel.add(addMemberButton,BorderLayout.WEST);
 		buttonPanel.add(exitButton,BorderLayout.EAST);
 		mainPanel.add(buttonPanel,BorderLayout.SOUTH);
@@ -99,17 +112,29 @@ public class AddMemberDialog extends JDialog {
 		Date dob=(Date)utilDateModel.getValue();
 		Center center=(Center)centerComboBox.getSelectedItem();
 		String memberCode=memberCodeTextField.getText();
+		String email=emailTextField.getText();
+		String phoneNumber=phoneNumberTextField.getText();
+		String fieldsRequired="";
+		if(firstName==null||firstName.equals("")){fieldsRequired+="First Name ";}
+		if(surname==null||surname.equals("")){fieldsRequired+="Surname ";}
+		if(dob==null){fieldsRequired+="Date Of Birth ";}
+		if(center==null){fieldsRequired+="Center";}
+		if(!(memberCode.length()==8)){ fieldsRequired+=" Member Code must be EXACTLY 8 numbers";}
+		if(firstName==null||surname==null||dob==null||center==null){messageLabel.setText("Required fields:"+fieldsRequired);}
+		
 		if(!(Common.getMember(memberCode)==null)){
 			messageLabel.setText("Unique barcode required. "+memberCode+" already in use.");
 			return null;
 		}
-		if(firstName.length()>0&&surname.length()>0&&memberCode.length()==8&&!dob.equals(null)&&!center.equals(null)){
+		if(firstName.length()>0&&surname.length()>0&&memberCode.length()==8&&!(dob==(null))&&!(center==(null))){
 			Member m=new Member();
 			m.setFirstName(firstName);
 			m.setSurname(surname);
 			m.setMemberCode(Integer.valueOf(memberCode));
 			m.setMemberDob(dob);
 			m.setCenter(center);
+			if(!(email==null)) { m.setEmail(email);}
+			if(!(phoneNumber==null)) {m.setPhoneNumber(phoneNumber);}
 			return m;
 		}
 		else return null;

@@ -48,6 +48,7 @@ public class Common {
 	
 	public static Member getMember(String barCode){
 		Member returnMember=null;
+		if(barCode.length()==8){
 		Session session=startSession();
 		Query memberQuery = session.createQuery("FROM Member "+
 				"WHERE MemberBarCode="+barCode);
@@ -55,6 +56,7 @@ public class Common {
 				//System.out.println(member.size()+" records");
 				session.getTransaction().commit();
 				if(member.size()>0) returnMember=member.get(0);
+		}
 				return returnMember;		
 	}
 	
