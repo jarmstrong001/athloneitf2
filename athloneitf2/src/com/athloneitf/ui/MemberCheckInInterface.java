@@ -36,7 +36,7 @@ public class MemberCheckInInterface extends JFrame {
 			"Enter barcode to scan into class");	
 	private final JLabel resultLabel = new JLabel("                ");
 	private final JTextArea paymentTextArea = new JTextArea(5,25);
-	private final Timer paymentAreaTimer;
+	//private final Timer paymentAreaTimer;
 	private final ClassType globalClassType;
 
 	
@@ -83,8 +83,8 @@ public class MemberCheckInInterface extends JFrame {
 		setSize(CommonUI.FULLSCREEN);
 		Timer updateClockTimer = new Timer(1000, updateClockAction);
 		updateClockTimer.start();
-		paymentAreaTimer=new Timer(5000,blankPaymentTextAreaAction);
-		paymentAreaTimer.start();
+		//paymentAreaTimer=new Timer(5000,blankPaymentTextAreaAction);
+		//paymentAreaTimer.start();
 
 		
 		MouseListener mouseListenerSingleClick=new MouseAdapter() {
@@ -113,6 +113,7 @@ public class MemberCheckInInterface extends JFrame {
 		listPanel.setSize(new Dimension(350,600));
 		listPanel.add(memberListScrollPane);
 		memberList.setMinimumSize(new Dimension((this.getHeight()-80),this.getWidth()-400));
+		//memberList.setCellRenderer(new AITFListCellRenderer(globalClassType));
 		listPanel.add(scanOutAllButton,BorderLayout.SOUTH);
 		scanOutAllButton.addActionListener(scanOutAllAction);
 		scanOutAllButton.setSize(new Dimension(300,30));
@@ -198,7 +199,7 @@ public class MemberCheckInInterface extends JFrame {
 		paymentTextArea.setText(parseStringArrayList(Common
 				.getPaymentStatus(member,globalClassType)));
 		paymentTextArea.setEnabled(true);
-		paymentAreaTimer.start();
+		//paymentAreaTimer.start();
 	}
 
 	private String parseStringArrayList(ArrayList<String> input) {
