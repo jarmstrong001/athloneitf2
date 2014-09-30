@@ -222,6 +222,7 @@ public static TableModel getPaymentsForDate(Date d){
 	public static ArrayList<String> getPaymentStatusTkd(Member member){
 		ArrayList<String> paymentDefaults=new ArrayList<String>();
 		if(member==null){return paymentDefaults;}
+		paymentDefaults.add(member.getName());
 		Calendar c=Calendar.getInstance();
 		Calendar minusYear=Calendar.getInstance();
 		minusYear.add(Calendar.YEAR,-1);
@@ -237,6 +238,7 @@ public static TableModel getPaymentsForDate(Date d){
 			Payment p=paymentList.get(0);
 			//System.out.println("Payment "+p.getPaymentId()+" "+p);
 			Calendar today=Calendar.getInstance();
+			today.set(Calendar.HOUR,0);
 			Calendar paymentTo=new GregorianCalendar();
 			paymentTo.setTime(p.getPaymentTo());
 			if(paymentTo.before(today)) paymentDefaults.add(
@@ -256,6 +258,7 @@ public static TableModel getPaymentsForDate(Date d){
 			Payment p=paymentListIUTF.get(0);
 			System.out.println("Payment "+p.getPaymentId()+" "+p);
 			Calendar today=Calendar.getInstance();
+			today.set(Calendar.HOUR,0);
 			Calendar paymentTo=new GregorianCalendar();
 			paymentTo.setTime(p.getPaymentTo());
 			if(paymentTo.before(today)) paymentDefaults.add(
@@ -274,6 +277,7 @@ public static TableModel getPaymentsForDate(Date d){
 					Payment p=paymentListIUTFChild.get(0);
 					System.out.println("Payment "+p.getPaymentId()+" "+p);
 					Calendar today=Calendar.getInstance();
+					today.set(Calendar.HOUR,0);
 					Calendar paymentTo=new GregorianCalendar();
 					paymentTo.setTime(p.getPaymentTo());
 					if(paymentTo.before(today)) paymentDefaults.add(
@@ -282,6 +286,7 @@ public static TableModel getPaymentsForDate(Date d){
 		}
 		
 		Session session3=startSession();
+		String paymentUntilDate=null;
 		// Check when TKD fees have been paid up until
 		List<Payment> paymentListTKDFees=session3.createQuery("From Payment WHERE "
 				+"memberCode="+member.getMemberCode()+" AND (paymentTypeId=1 OR paymentTypeId=2 OR paymentTypeId=6 OR paymentTypeId=7)"
@@ -292,15 +297,17 @@ public static TableModel getPaymentsForDate(Date d){
 			Payment p=paymentListTKDFees.get(0);
 			//System.out.println("Payment "+p.getPaymentId()+" "+p);
 			Calendar today=Calendar.getInstance();
+			today.set(Calendar.HOUR,0);
 			Calendar paymentTo=new GregorianCalendar();
 			paymentTo.setTime(p.getPaymentTo());
 			if(paymentTo.before(today)) paymentDefaults.add(
 					"TKD fees not up to date. \nLast paid up to "+dobDateFormat.format(p.getPaymentTo()));
+			else if(paymentTo.after(today)) paymentUntilDate=" until "+dobDateFormat.format(p.getPaymentTo());
 		}else paymentDefaults.add("TKD fees not paid");
 		
 		
 		
-		if(paymentDefaults.size()==0) paymentDefaults.add("Payment up to date");
+		if(paymentDefaults.size()==1) paymentDefaults.add("Payments for TKD"+paymentUntilDate+" up to date");
 		for(String s:paymentDefaults){ System.out.println(s);}
 		return paymentDefaults;
 		
@@ -315,11 +322,12 @@ public static TableModel getPaymentsForDate(Date d){
 	
 	public static ArrayList<String> getPaymentStatusSkyboxing(Member member) {
 		ArrayList<String> paymentDefaults = new ArrayList<String>();
+		paymentDefaults.add(member.getName());
 		Session session3 = startSession();
 		// Check when Skyboxing fees have been paid up until
 		List<Payment> paymentListSkyboxingFees = session3.createQuery(
 				"From Payment WHERE " + "memberCode=" + member.getMemberCode()
-						+ " AND paymentTypeId=14"
+						+ " AND (paymentTypeId=14 OR paymentTypeId=10 OR paymentTypeId=11 OR paymentTypeId=12 OR paymentTypeId=13)"
 						+ " ORDER BY paymentTo DESC").list();
 		session3.getTransaction().commit();
 		System.out.println("PaymentListSize=" + paymentListSkyboxingFees.size());
@@ -327,6 +335,7 @@ public static TableModel getPaymentsForDate(Date d){
 			Payment p = paymentListSkyboxingFees.get(0);
 			System.out.println("Payment " + p.getPaymentId() + " " + p);
 			Calendar today = Calendar.getInstance();
+			today.set(Calendar.HOUR,0);
 			Calendar paymentTo = new GregorianCalendar();
 			paymentTo.setTime(p.getPaymentTo());
 			if (paymentTo.before(today))
@@ -335,13 +344,36 @@ public static TableModel getPaymentsForDate(Date d){
 								+ dobDateFormat.format(p.getPaymentTo()));
 		} else
 			paymentDefaults.add("Skyboxing fees not paid");
-		if(paymentDefaults.size()==0) paymentDefaults.add("Payment up to date");
+		
+		String datePaymentUntil=null;
+		Session session4 = startSession();
+		// Check when Skyboxing fees have been paid up until
+		List<Payment> paymentListSkyboxingFees2 = session4.createQuery(
+				"From Payment WHERE " + "memberCode=" + member.getMemberCode()
+						+ " AND paymentTypeId=14"
+						+ " ORDER BY paymentTo DESC").list();
+		session4.getTransaction().commit();
+		//System.out.println("PaymentListSize=" + paymentListSkyboxingFees.size());
+		if (paymentListSkyboxingFees2.size() > 0) {
+			Payment p = paymentListSkyboxingFees.get(0);
+			System.out.println("Payment " + p.getPaymentId() + " " + p);
+			Calendar today = Calendar.getInstance();
+			today.set(Calendar.HOUR,0);
+			Calendar paymentTo = new GregorianCalendar();
+			paymentTo.setTime(p.getPaymentTo());
+			if (paymentTo.after(today))
+				datePaymentUntil=" until "+dobDateFormat.format(p.getPaymentTo());
+		} else
+			paymentDefaults.add("Skyboxing fees not paid");
+		
+		if(paymentDefaults.size()==1) paymentDefaults.add("Payments for Skyboxing"+datePaymentUntil+" up to date");
 		for(String s:paymentDefaults){ System.out.println(s);}
 		return paymentDefaults;
 	}
 
 	public static ArrayList<String> getPaymentStatusKickboxing(Member member){
 		ArrayList<String> paymentDefaults=new ArrayList<String>();
+		paymentDefaults.add(member.getName());
 		Calendar c=Calendar.getInstance();
 		Calendar minusYear=Calendar.getInstance();
 		minusYear.add(Calendar.YEAR,-1);
@@ -358,6 +390,7 @@ public static TableModel getPaymentsForDate(Date d){
 			//System.out.println("Payment "+p.getPaymentId()+" "+p);
 			Calendar today=Calendar.getInstance();
 			Calendar paymentTo=new GregorianCalendar();
+			today.set(Calendar.HOUR,0);
 			paymentTo.setTime(p.getPaymentTo());
 			if(paymentTo.before(today)) paymentDefaults.add(
 					"Kickboxing insurance not up to date. \nLast paid up to "+dobDateFormat.format(p.getPaymentTo()));
@@ -376,6 +409,7 @@ public static TableModel getPaymentsForDate(Date d){
 			Payment p=paymentListIUTF.get(0);
 			System.out.println("Payment "+p.getPaymentId()+" "+p);
 			Calendar today=Calendar.getInstance();
+			today.set(Calendar.HOUR,0);
 			Calendar paymentTo=new GregorianCalendar();
 			paymentTo.setTime(p.getPaymentTo());
 			if(paymentTo.before(today)) paymentDefaults.add(
@@ -403,6 +437,7 @@ public static TableModel getPaymentsForDate(Date d){
 		
 		Session session3=startSession();
 		// Check when TKD fees have been paid up until
+		String paymentUntilDate=null;
 		List<Payment> paymentListTKDFees=session3.createQuery("From Payment WHERE "
 				+"memberCode="+member.getMemberCode()+" AND (paymentTypeId=20 OR paymentTypeId=21)"
 				+" ORDER BY paymentTo DESC").list();
@@ -412,16 +447,18 @@ public static TableModel getPaymentsForDate(Date d){
 			Payment p=paymentListTKDFees.get(0);
 			System.out.println("Payment "+p.getPaymentId()+" "+p);
 			Calendar today=Calendar.getInstance();
+			today.set(Calendar.HOUR,0);
 			Calendar paymentTo=new GregorianCalendar();
 			paymentTo.setTime(p.getPaymentTo());
 			if(paymentTo.before(today)) paymentDefaults.add(
 					"Kickboxing fees not up to date. \nLast paid up to "+dobDateFormat.format(p.getPaymentTo()));
+		else if(paymentTo.after(today)) paymentUntilDate=" until "+dobDateFormat.format(p.getPaymentTo());
 		}else paymentDefaults.add("Kickboxing fees not paid");
 		
 		
 		
-		if(paymentDefaults.size()==0) paymentDefaults.add("Payment up to date");
-		for(String s:paymentDefaults){ System.out.println(s);}
+		if(paymentDefaults.size()==1) paymentDefaults.add("Payments for Kickboxing"+paymentUntilDate+" up to date");
+		//for(String s:paymentDefaults){ System.out.println(s);}
 		return paymentDefaults;
 	}
 	

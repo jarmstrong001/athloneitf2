@@ -113,7 +113,7 @@ public class MemberCheckInInterface extends JFrame {
 		listPanel.setSize(new Dimension(350,600));
 		listPanel.add(memberListScrollPane);
 		memberList.setMinimumSize(new Dimension((this.getHeight()-80),this.getWidth()-400));
-		//memberList.setCellRenderer(new AITFListCellRenderer(globalClassType));
+		memberList.setCellRenderer(new AITFListCellRenderer(globalClassType));
 		listPanel.add(scanOutAllButton,BorderLayout.SOUTH);
 		scanOutAllButton.addActionListener(scanOutAllAction);
 		scanOutAllButton.setSize(new Dimension(300,30));

@@ -2,7 +2,10 @@ package com.athloneitf.ui;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.util.HashMap;
+import java.util.List;
 
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
@@ -11,7 +14,7 @@ import com.athloneitf.datatype.ClassType;
 import com.athloneitf.datatype.Member;
 import com.athloneitf.main.Common;
 
-public class AITFListCellRenderer extends JLabel implements ListCellRenderer<Member> {
+public class AITFListCellRenderer extends DefaultListCellRenderer{
 
 	private ClassType classType;
 	
@@ -21,15 +24,22 @@ public class AITFListCellRenderer extends JLabel implements ListCellRenderer<Mem
 		classType=ct;
 	}
 
-	@Override
-	public Component getListCellRendererComponent(JList<? extends Member> list,
-			Member value, int index, boolean isSelected, boolean cellHasFocus) {
-		// TODO Auto-generated method stub
-		if(Common.getPaymentStatus(value,classType).size()>0){
-			this.setBackground(Color.RED);
+		   
+    public Component getListCellRendererComponent( JList list,  
+            Object value, int index, boolean isSelected,  
+            boolean cellHasFocus )  
+    {  
+        super.getListCellRendererComponent( list, value, index,  
+                isSelected, cellHasFocus ); 
+        
+        List<String> paymentDefaults=Common.getPaymentStatus((Member)value,classType);
+		if(paymentDefaults.get(paymentDefaults.size()-1).endsWith("up to date")){
+			 setForeground( Color.BLACK );
 		}
-		setText(value.getName());
+		else setForeground( Color.RED);
+		
 		return this;
+		
 		
 	}
 
