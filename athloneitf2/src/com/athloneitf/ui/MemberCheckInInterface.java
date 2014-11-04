@@ -100,7 +100,7 @@ public class MemberCheckInInterface extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 				if(e.getClickCount()==2) {
 					Member selectedMember=(Member)memberList.getSelectedValue();
-					PaymentDialog pd=new PaymentDialog(selectedMember,globalClassType,"");
+					PaymentDialog pd=new PaymentDialog(selectedMember,globalClassType,"",0);
 					pd.setVisible(true);
 					MemberCheckInInterface.this.dispose();
 				}
