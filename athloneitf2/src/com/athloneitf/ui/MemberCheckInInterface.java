@@ -15,6 +15,7 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.text.html.HTMLDocument;
 
 import com.athloneitf.datatype.*;
 import com.athloneitf.main.Common;
@@ -36,6 +37,7 @@ public class MemberCheckInInterface extends JFrame {
 			"Enter barcode to scan into class");	
 	private final JLabel resultLabel = new JLabel("                ");
 	private final JTextArea paymentTextArea = new JTextArea(5,25);
+	//private final JTextPane paymentEditorPane=new JTextPane(new HTMLDocument());
 	//private final Timer paymentAreaTimer;
 	private final ClassType globalClassType;
 
@@ -128,11 +130,12 @@ public class MemberCheckInInterface extends JFrame {
 		resultLabel.setPreferredSize(new Dimension(350,50));
 		loginPanel.add(resultLabel); 
 		paymentTextArea.setEnabled(false);
-		paymentTextArea.setPreferredSize(new Dimension(350,120));
+		paymentTextArea.setSize(new Dimension(350,120));
 		/*
 		 *  paymentTextArea.setMaximumSize(new Dimension(350,150));
 		 *	paymentTextArea.setMinimumSize(new Dimension(350,150));
 		 */
+		//paymentEditorPane.setText(paymentTextArea.getText());
 		loginPanel.add(paymentTextArea);
 		
 		endClassButton.addActionListener(endClassAction);
@@ -163,6 +166,7 @@ public class MemberCheckInInterface extends JFrame {
 								+ " scanned out of class at "
 								+ Common.timeFormat.format(new Date()));
 						paymentTextArea.setText("");
+						//paymentEditorPane.setText(paymentTextArea.getText());
 						updateMemberList();
 					} else {
 						Common.memberScanIn(member,ClassType.TAEKWONDO);
@@ -199,6 +203,8 @@ public class MemberCheckInInterface extends JFrame {
 		paymentTextArea.setText(parseStringArrayList(Common
 				.getPaymentStatus(member,globalClassType)));
 		paymentTextArea.setEnabled(true);
+		//paymentEditorPane.setText(paymentTextArea.getText());
+
 		//paymentAreaTimer.start();
 	}
 
