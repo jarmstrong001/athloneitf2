@@ -78,7 +78,7 @@ public class Common {
 		
 		List<Payment> paymentList=new ArrayList<Payment>();
 		Session session=startSession();
-		Query memberPaymentQuery = session.createQuery("FROM Payment WHERE memberCode="+m.getMemberCode());
+		Query memberPaymentQuery = session.createQuery("FROM Payment WHERE memberCode="+m.getMemberCode()+" ORDER BY paymentTo DESC");
 		paymentList=memberPaymentQuery.list();
 		session.getTransaction().commit();
 		//System.out.println("*******************\nPayment List Size="+paymentList.size());
@@ -139,7 +139,7 @@ public static TableModel getPaymentsForDate(Date d){
 		session.save(scanIn);
 		session.getTransaction().commit();
 		try{
-			Audio.playWelcome();
+			//Audio.playWelcome();
 		}catch(Exception e){e.printStackTrace();}
 	}
 	
@@ -154,7 +154,7 @@ public static TableModel getPaymentsForDate(Date d){
 		session.save(scanOut);
 		session.getTransaction().commit();
 		try{
-			Audio.playGoodbye();
+			//Audio.playGoodbye();
 		}catch(Exception e){e.printStackTrace();}
 	}
 	
