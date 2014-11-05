@@ -1,14 +1,3 @@
-/*------------------------------------------------------------------------------
- *******************************************************************************
- * COPYRIGHT Ericsson 2012
- *
- * The copyright to the computer program(s) herein is the property of
- * Ericsson Inc. The programs may be used and/or copied only with written
- * permission from Ericsson Inc. or in accordance with the terms and
- * conditions stipulated in the agreement/contract under which the
- * program(s) have been supplied.
- *******************************************************************************
- *----------------------------------------------------------------------------*/
 package com.athloneitf.ui;
 
 import java.awt.*;
@@ -51,11 +40,15 @@ public class PaymentDialog extends JDialog {
 	private final ClassType globalClassType;
 	private boolean dateSelected = false;
 	private boolean paymentAmountSelected = false;
+	private final int globalFlag;
 
-	public PaymentDialog(Member member, ClassType ct,String message) {
+	
+	
+	public PaymentDialog(Member member, ClassType ct,String message,int flag) {
 		messageTextArea.setText(message);
 		globalMember = member;
 		globalClassType = ct;
+		globalFlag = flag;
 		makePaymentButton = new JButton("Make Payment");
 		makePaymentButton.addActionListener(new ActionListener() {
 
@@ -73,7 +66,7 @@ public class PaymentDialog extends JDialog {
 						+ " for "
 						+ paymentTypeList.getSelectedValue()
 								.getPaymentTypeName() + "\n up to date: "
-						+ ((Date) utilDateModel.getValue()).toString());
+						+ ((Date) utilDateModel.getValue()).toString(),globalFlag);
 			}
 
 		});
@@ -84,7 +77,7 @@ public class PaymentDialog extends JDialog {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				dispose();
-				new MemberCheckInInterface(globalClassType);
+				if(globalFlag==0) new MemberCheckInInterface(globalClassType);
 			}
 		});
 		BufferedImage tkdIcon = CommonUI.getTkdIcon();
