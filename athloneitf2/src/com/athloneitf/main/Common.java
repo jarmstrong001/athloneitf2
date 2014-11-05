@@ -172,6 +172,14 @@ public static TableModel getPaymentsForDate(Date d){
 		
 	}
 	
+	public static MemberScanInTableModel getScansForMember(Member member){
+		Session session=startSession();
+		List<MemberScanIn> scans=session.createQuery("FROM MemberScanIn "
+				+"WHERE memberCode="+member.getMemberCode()+" ORDER BY scanInTime DESC").list();
+		session.getTransaction().commit();
+		return new MemberScanInTableModel(scans);
+	}
+	
 	public static void autoScanOutMember(Member member){
 		Session session=startSession();
 		List<MemberScanIn> latest=session.createQuery("FROM MemberScanIn "

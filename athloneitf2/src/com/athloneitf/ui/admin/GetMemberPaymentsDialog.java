@@ -28,6 +28,7 @@ public class GetMemberPaymentsDialog extends JDialog {
 	private final JLabel paymentsTableLabel=new JLabel();
 	private final JLabel messageLabel=new JLabel();
 	private final JPanel tablePanel=new JPanel(new GridBagLayout());
+	private final JTable scanTable=new JTable();
 	
 	
 	public GetMemberPaymentsDialog(){
@@ -68,7 +69,8 @@ public class GetMemberPaymentsDialog extends JDialog {
 				else messageLabel.setText("Please enter member name or barcode");
 				if(!(member==null))
 					{paymentsTable.setModel(Common.getPaymentsForMember(member));
-					 paymentsTableLabel.setText("Payments for "+member.getName());}
+					 paymentsTableLabel.setText("Payments for "+member.getName());
+					 scanTable.setModel(Common.getScansForMember(member));}
 			}
 			
 		});
@@ -97,6 +99,9 @@ public class GetMemberPaymentsDialog extends JDialog {
 		JScrollPane tableScrollPane=new JScrollPane(paymentsTable);
 		tableScrollPane.setSize(new Dimension(600,120));
 		tableScrollPane.setLocation(100,100);
+		JScrollPane scanScrollPane=new JScrollPane(scanTable);
+		scanScrollPane.setSize(new Dimension(600,250));
+		scanScrollPane.setLocation(100,350);
 		paymentsTableLabel.setSize(200,20);
 		GridBagConstraints labelc=new GridBagConstraints();
 		labelc.gridy=0;
@@ -105,7 +110,19 @@ public class GetMemberPaymentsDialog extends JDialog {
 		GridBagConstraints ptc=new GridBagConstraints();
 		ptc.anchor=GridBagConstraints.PAGE_START;
 		ptc.gridy=1;
+		ptc.gridheight=2;
+		ptc.fill=GridBagConstraints.BOTH;
+		ptc.weightx=1.0;
+		ptc.weighty=0.3;
 		tablePanel.add(tableScrollPane,ptc);
+		GridBagConstraints stc=new GridBagConstraints();
+		stc.gridy=3;
+		stc.gridheight=4;
+		stc.anchor=GridBagConstraints.CENTER;
+		stc.fill=GridBagConstraints.BOTH;
+		stc.weightx=1.0;
+		stc.weighty=0.7;
+		tablePanel.add(scanScrollPane,stc);
 		this.add(tablePanel,BorderLayout.CENTER);
 		this.add(messageLabel,BorderLayout.SOUTH);
 		this.setSize(CommonUI.FULLSCREEN);

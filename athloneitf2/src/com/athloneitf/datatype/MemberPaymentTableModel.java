@@ -25,7 +25,7 @@ public class MemberPaymentTableModel extends AbstractTableModel {
 			i++;
 			paymentAmountTotal+=p.getPaymentAmount();
 		}
-		rowData[payments.size()]=new String[]{"","€"+paymentAmountTotal,"",""};
+		rowData[payments.size()]=new String[]{"Total","€"+paymentAmountTotal,"",""};
 
 	}
 	
