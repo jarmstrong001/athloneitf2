@@ -47,8 +47,9 @@ public class GetMemberPaymentsDialog extends JDialog {
 				    memberCodeField.setText("");
 				    
 				}
-				else messageLabel.setText("Please enter member name or barcode");
+				
 				if(!(member==null)){new PaymentDialog(member,(ClassType)classTypeComboBox.getSelectedItem(),"",1);}
+				else messageLabel.setText("No member found. Please enter member name or barcode");
 				
 			}
 		});
