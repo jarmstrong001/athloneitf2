@@ -14,7 +14,7 @@ import com.athloneitf.main.Common;
 
 public class CommonUI {
 	
-	public static final Dimension FULLSCREEN=new Dimension(900,700);
+	public static final Dimension FULLSCREEN=new Dimension(1000,700);
 
 	private static BufferedImage tkdIcon = new BufferedImage(1, 1, 1);
 	private static BufferedImage skyIcon = new BufferedImage(1, 1, 1);

@@ -84,6 +84,7 @@ public class ClassSelectDialog extends JDialog {
 			public void actionPerformed(ActionEvent e) {
 				MemberCheckInInterface mcii = new MemberCheckInInterface(
 						ClassType.TAEKWONDO);
+				mcii.setLocation(300, 0);
 				mcii.setVisible(true);
 				ClassSelectDialog.this.dispose();
 			}
@@ -94,6 +95,7 @@ public class ClassSelectDialog extends JDialog {
 			public void actionPerformed(ActionEvent e) {
 				MemberCheckInInterface mcii = new MemberCheckInInterface(
 						ClassType.SKYBOXING);
+				mcii.setLocation(300, 0);
 				mcii.setVisible(true);
 				ClassSelectDialog.this.dispose();
 			}
@@ -104,6 +106,7 @@ public class ClassSelectDialog extends JDialog {
 			public void actionPerformed(ActionEvent e) {
 				MemberCheckInInterface mcii = new MemberCheckInInterface(
 						ClassType.KICKBOXING);
+				mcii.setLocation(300, 0);
 				mcii.setVisible(true);
 				ClassSelectDialog.this.dispose();
 			}
@@ -113,6 +116,7 @@ public class ClassSelectDialog extends JDialog {
 		adminButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				AdminFrame af=new AdminFrame();
+				af.setLocation(368,30);
 				ClassSelectDialog.this.dispose();
 			}
 		});

@@ -335,7 +335,7 @@ public static TableModel getPaymentsForDate(Date d){
 		// Check when Skyboxing fees have been paid up until
 		List<Payment> paymentListSkyboxingFees = session3.createQuery(
 				"From Payment WHERE " + "memberCode=" + member.getMemberCode()
-						+ " AND (paymentTypeId=14 OR paymentTypeId=10 OR paymentTypeId=11 OR paymentTypeId=12 OR paymentTypeId=13)"
+						+ " AND (paymentTypeId=14 OR paymentTypeId=10 OR paymentTypeId=11 OR paymentTypeId=13)"
 						+ " ORDER BY paymentTo DESC").list();
 		session3.getTransaction().commit();
 		System.out.println("PaymentListSize=" + paymentListSkyboxingFees.size());

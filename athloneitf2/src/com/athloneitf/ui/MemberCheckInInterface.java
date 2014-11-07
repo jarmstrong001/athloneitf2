@@ -7,13 +7,23 @@ import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
+import net.sourceforge.jdatepicker.DateModel;
+import net.sourceforge.jdatepicker.impl.JDatePanelImpl;
+import net.sourceforge.jdatepicker.impl.UtilDateModel;
 
 import com.athloneitf.datatype.*;
 import com.athloneitf.main.Common;
@@ -28,7 +38,7 @@ public class MemberCheckInInterface extends JFrame {
 	private final JButton endClassButton=new JButton("Leave Class Checkin Screen");
 	private final JTextField scanInTextField = new JTextField(10);
 	private final JPanel loginPanel = new JPanel();
-	private final JPanel listPanel = new JPanel();
+	private final JPanel memberListPanel = new JPanel();
 	private final JPanel rightPanel =new JPanel();
 	private final JPanel leftPanel = new JPanel();
 	private final JLabel scanInLabel = new JLabel(
@@ -36,6 +46,8 @@ public class MemberCheckInInterface extends JFrame {
 	private final JLabel resultLabel = new JLabel("                ");
 	private final JTextArea paymentTextArea = new JTextArea(5,25);
 	private final ClassType globalClassType;
+	private JLabel picLabel ;
+	private JPanel paymentPanel;
 
 	
 	private ActionListener updateClockAction = new ActionListener() {
@@ -94,9 +106,7 @@ public class MemberCheckInInterface extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 				if(e.getClickCount()==2) {
 					Member selectedMember=(Member)memberList.getSelectedValue();
-					PaymentDialog pd=new PaymentDialog(selectedMember,globalClassType,"",0);
-					pd.setVisible(true);
-					MemberCheckInInterface.this.dispose();
+					MemberCheckInInterface.this.openPaymentPanel(selectedMember,globalClassType);
 				}
 			}
 		};
@@ -105,14 +115,14 @@ public class MemberCheckInInterface extends JFrame {
 		
 		updateMemberList();
 		JScrollPane memberListScrollPane=new JScrollPane(memberList);
-		listPanel.setLayout(new BorderLayout());
-		listPanel.add(memberListScrollPane,BorderLayout.CENTER);
+		memberListPanel.setLayout(new BorderLayout());
+		memberListPanel.add(memberListScrollPane,BorderLayout.CENTER);
 		memberList.setCellRenderer(new AITFListCellRenderer(globalClassType));
-		listPanel.add(scanOutAllButton,BorderLayout.SOUTH);
+		memberListPanel.add(scanOutAllButton,BorderLayout.SOUTH);
 		scanOutAllButton.addActionListener(scanOutAllAction);
 		scanOutAllButton.setSize(new Dimension(180,20));
 		clock = new JLabel(new Date().toString());
-		listPanel.add(clock,BorderLayout.NORTH);
+		memberListPanel.add(clock,BorderLayout.NORTH);
 		loginPanel.setLayout(new GridBagLayout());
 
 		scanInTextField.setPreferredSize(new Dimension(200,20));
@@ -168,7 +178,7 @@ public class MemberCheckInInterface extends JFrame {
 		loginPanel.add(paymentTextArea,paymentAreac);
 		
 		
-		JLabel picLabel = new JLabel(new ImageIcon(CommonUI.getPic(classType)));
+		picLabel = new JLabel(new ImageIcon(CommonUI.getPic(classType)));
 		picLabel.setPreferredSize(new Dimension(700,500));
 		leftPanel.setLayout(new GridBagLayout());
 		GridBagConstraints plc=new GridBagConstraints();
@@ -197,8 +207,8 @@ public class MemberCheckInInterface extends JFrame {
 		loginPanel.setBackground(Color.WHITE);
 		
 		rightPanel.setBackground(Color.BLACK);
-		listPanel.setPreferredSize(new Dimension(150,660));
-		rightPanel.add(listPanel);
+		memberListPanel.setPreferredSize(new Dimension(150,660));
+		rightPanel.add(memberListPanel);
 		rightPanel.setMaximumSize(new Dimension(150,800));
 		rightPanel.setMinimumSize(new Dimension(150,800));
 		//System.out.println("ClassType=" + classType.name());
@@ -264,6 +274,23 @@ public class MemberCheckInInterface extends JFrame {
 
 	}
 	
+	private void openPaymentPanel(Member member,ClassType localClassType){
+		leftPanel.remove(picLabel);
+		paymentPanel=initialisePaymentPanel("", member);
+		leftPanel.add(paymentPanel);
+	}
+	
+	private void closePaymentPanel(Member member){
+		closePaymentPanel(member,"");
+	}
+	
+	private void closePaymentPanel(Member member,String message){
+		resultLabel.setText(message);
+		showPayment(member);
+		leftPanel.remove(paymentPanel);
+		leftPanel.add(picLabel);
+	}
+	
 	private void updateMemberList(){
 		List<Member> tempList=Common.getListOfScannedInMembers();
 		Collections.sort((List<Member>)tempList);
@@ -288,5 +315,147 @@ public class MemberCheckInInterface extends JFrame {
 		//System.out.println(returnValue + " payment info");
 		return returnValue;
 	}
+	
+// Payment Panel Code
+		
+		private final JButton makePaymentButton= new JButton("Make Payment");
+		private final JButton exitButton = new JButton("Exit");
+		private final JPanel panel = new JPanel(new BorderLayout());
+		private final JPanel paymentListPanel = new JPanel();
+		private final JPanel buttonPanel = new JPanel(new BorderLayout());
+		private final JList<PaymentType> paymentTypeList = new JList<PaymentType>();
+		private final JTextField paymentAmountTextField = new JTextField("");
+		private final JLabel paymentAmountLabel = new JLabel("Payment Amount");
+		private final JPanel paymentAmountPanel = new JPanel(new GridLayout(1, 2));
+		private final JTextArea paymentStatusTextArea = new JTextArea(5, 25);
+		private final JTextArea messageTextArea = new JTextArea(5, 25);
+		private final JPanel paymentStatusPanel = new JPanel(new BorderLayout());
+		private final DateModel utilDateModel = new UtilDateModel();
+		private final JDatePanelImpl paymentToPanel = new JDatePanelImpl(
+				utilDateModel);
+		private Member globalMember;
+		private boolean dateSelected = false;
+		private boolean paymentAmountSelected = false;
+		
+			
+		private JPanel initialisePaymentPanel(String message,Member member){
+			messageTextArea.setText(message);
+			globalMember = member;
+			makePaymentButton.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					Common.makePayment(paymentTypeList.getSelectedValue(),
+							globalMember, (Date) utilDateModel.getValue(),
+							getPaymentAmount());
+					updatePaymentStatus(globalMember, globalClassType);
+					closePaymentPanel(globalMember,"<html>Payment made for "
+							+ globalMember.getName()
+							+ "<br>of €"
+							+ String.format("%9.2f",getPaymentAmount())
+							+ " for "
+							+ paymentTypeList.getSelectedValue()
+									.getPaymentTypeName() + "<br>up to date: "
+							+ Common.dobDateFormat.format((Date) utilDateModel.getValue())+"</html>");
+				}
+					
+			});
+			makePaymentButton.setEnabled(false);
+			
+			exitButton.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					closePaymentPanel(globalMember);
+					
+				}
+			});
+			
+			utilDateModel.addChangeListener(new ChangeListener() {
+
+				@Override
+				public void stateChanged(ChangeEvent arg0) {
+					System.out.println("DateModel changed");
+					setDateSelected();
+					if (paymentAmountSelected && dateSelected) {
+						makePaymentButton.setEnabled(true);
+					}
+				}
+			});
+			panel.add(paymentToPanel, BorderLayout.CENTER);
+
+			paymentTypeList.setListData(Common.getPaymentTypes(globalClassType).toArray(
+					new PaymentType[1]));
+			paymentTypeList.addListSelectionListener(new ListSelectionListener() {
+
+				@Override
+				public void valueChanged(ListSelectionEvent arg0) {
+					JList<PaymentType> tempList = (JList<PaymentType>) arg0
+							.getSource();
+					PaymentType pt = tempList.getSelectedValue();
+					paymentAmountTextField.setText(String.format("%9.2f",
+							pt.getPaymentAmount()));
+					setPaymentAmountFieldSelected();
+					if (paymentAmountSelected && dateSelected) {
+						makePaymentButton.setEnabled(true);
+					}
+				}
+			});
+			paymentListPanel.add(paymentTypeList);
+			panel.add(paymentListPanel, BorderLayout.WEST);
+
+			paymentAmountPanel.add(paymentAmountLabel);
+			paymentAmountPanel.add(paymentAmountTextField);
+			buttonPanel.add(paymentAmountPanel, BorderLayout.NORTH);
+
+			buttonPanel.add(makePaymentButton, BorderLayout.WEST);
+			buttonPanel.add(exitButton, BorderLayout.SOUTH);
+			panel.add(buttonPanel, BorderLayout.SOUTH);
+
+			paymentStatusPanel.add(paymentStatusTextArea, BorderLayout.NORTH);
+			paymentStatusPanel.add(messageTextArea, BorderLayout.SOUTH);
+			updatePaymentStatus(member, globalClassType);
+			panel.add(paymentStatusPanel, BorderLayout.EAST);
+			
+			
+			panel.setSize(CommonUI.FULLSCREEN);
+			return panel;
+		}
+
+		private void setPaymentAmountFieldSelected() {
+			if (!getPaymentAmount().equals(0.0)) {
+				paymentAmountSelected = true;
+			}
+		}
+
+		private void setDateSelected() {
+			dateSelected = true;
+		}
+
+		private Double getPaymentAmount() {
+			Double returnValue = 0.0;
+			try {
+				returnValue = Double.valueOf(paymentAmountTextField.getText());
+			} catch (NullPointerException pe) {
+				paymentStatusTextArea
+						.append("\nINVALID DATA IN PAYMENT AMOUNT BOX");
+			} finally {
+				if (returnValue.isNaN() || returnValue.isInfinite()) {
+					returnValue = 0.0;
+				}
+			}
+			return returnValue;
+		}
+
+		private void updatePaymentStatus(Member member, ClassType ct) {
+
+			paymentStatusTextArea.setText(parseStringArrayList(Common
+					.getPaymentStatus(member, globalClassType)));
+
+		}
+
+
+
+	
 
 }
