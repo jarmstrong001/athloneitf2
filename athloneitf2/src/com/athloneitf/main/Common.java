@@ -331,14 +331,17 @@ public static TableModel getPaymentsForDate(Date d){
 	public static ArrayList<String> getPaymentStatusSkyboxing(Member member) {
 		ArrayList<String> paymentDefaults = new ArrayList<String>();
 		paymentDefaults.add("Payments from "+member.getName()+":");
-		Session session3 = startSession();
+		
+		/*Session session3 = startSession();
+		
 		// Check when Skyboxing fees have been paid up until
+		
 		List<Payment> paymentListSkyboxingFees = session3.createQuery(
 				"From Payment WHERE " + "memberCode=" + member.getMemberCode()
 						+ " AND (paymentTypeId=14 OR paymentTypeId=10 OR paymentTypeId=11 OR paymentTypeId=13)"
 						+ " ORDER BY paymentTo DESC").list();
 		session3.getTransaction().commit();
-		System.out.println("PaymentListSize=" + paymentListSkyboxingFees.size());
+		System.out.println("Skyboxing PaymentListSize=" + paymentListSkyboxingFees.size());
 		if (paymentListSkyboxingFees.size() > 0) {
 			Payment p = paymentListSkyboxingFees.get(0);
 			System.out.println("Payment " + p.getPaymentId() + " " + p);
@@ -352,18 +355,18 @@ public static TableModel getPaymentsForDate(Date d){
 								+ dobDateFormat.format(p.getPaymentTo()));
 		} else
 			paymentDefaults.add("Skyboxing fees not paid");
-		
+		*/
 		String paymentUntilDate=null;
 		Session session4 = startSession();
 		// Check when Skyboxing fees have been paid up until
 		List<Payment> paymentListSkyboxingFees2 = session4.createQuery(
 				"From Payment WHERE " + "memberCode=" + member.getMemberCode()
-						+ " AND paymentTypeId=14"
+						+ " AND (paymentTypeId=14 OR paymentTypeId=10 OR paymentTypeId=11 OR paymentTypeId=13)"
 						+ " ORDER BY paymentTo DESC").list();
 		session4.getTransaction().commit();
 		//System.out.println("PaymentListSize=" + paymentListSkyboxingFees.size());
 		if (paymentListSkyboxingFees2.size() > 0) {
-			Payment p = paymentListSkyboxingFees.get(0);
+			Payment p = paymentListSkyboxingFees2.get(0);
 			System.out.println("Payment " + p.getPaymentId() + " " + p);
 			Calendar today = Calendar.getInstance();
 			today.set(Calendar.HOUR,0);

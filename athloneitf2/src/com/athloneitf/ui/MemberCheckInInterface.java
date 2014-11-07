@@ -289,6 +289,7 @@ public class MemberCheckInInterface extends JFrame {
 		showPayment(member);
 		leftPanel.remove(paymentPanel);
 		leftPanel.add(picLabel);
+		this.repaint();
 	}
 	
 	private void updateMemberList(){
@@ -336,9 +337,11 @@ public class MemberCheckInInterface extends JFrame {
 		private Member globalMember;
 		private boolean dateSelected = false;
 		private boolean paymentAmountSelected = false;
+		private boolean listSet;
 		
 			
 		private JPanel initialisePaymentPanel(String message,Member member){
+			listSet=false;
 			messageTextArea.setText(message);
 			globalMember = member;
 			makePaymentButton.addActionListener(new ActionListener() {
@@ -390,6 +393,7 @@ public class MemberCheckInInterface extends JFrame {
 
 				@Override
 				public void valueChanged(ListSelectionEvent arg0) {
+				if (!(arg0.getValueIsAdjusting())&&listSet) {
 					JList<PaymentType> tempList = (JList<PaymentType>) arg0
 							.getSource();
 					PaymentType pt = tempList.getSelectedValue();
@@ -399,6 +403,7 @@ public class MemberCheckInInterface extends JFrame {
 					if (paymentAmountSelected && dateSelected) {
 						makePaymentButton.setEnabled(true);
 					}
+				}
 				}
 			});
 			paymentListPanel.add(paymentTypeList);
@@ -419,6 +424,7 @@ public class MemberCheckInInterface extends JFrame {
 			
 			
 			panel.setSize(CommonUI.FULLSCREEN);
+			listSet=true;
 			return panel;
 		}
 
