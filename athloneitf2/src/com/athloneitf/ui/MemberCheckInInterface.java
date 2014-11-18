@@ -331,8 +331,8 @@ public class MemberCheckInInterface extends JFrame {
 		private final JTextArea paymentStatusTextArea = new JTextArea(5, 25);
 		private final JTextArea messageTextArea = new JTextArea(5, 25);
 		private final JPanel paymentStatusPanel = new JPanel(new BorderLayout());
-		private final DateModel utilDateModel = new UtilDateModel();
-		private final JDatePanelImpl paymentToPanel = new JDatePanelImpl(
+		private DateModel utilDateModel = new UtilDateModel();
+		private JDatePanelImpl paymentToPanel = new JDatePanelImpl(
 				utilDateModel);
 		private Member globalMember;
 		private boolean dateSelected = false;
@@ -344,10 +344,34 @@ public class MemberCheckInInterface extends JFrame {
 			listSet=false;
 			messageTextArea.setText(message);
 			globalMember = member;
+			dateSelected=false;
+			paymentAmountSelected=false;
+			paymentAmountTextField.setText("");
+			utilDateModel=new UtilDateModel();
+			utilDateModel.addChangeListener(new ChangeListener() {
+				@Override
+				public void stateChanged(ChangeEvent arg0) {
+					if (!(utilDateModel.getValue() == null)) {
+						System.out.println("DateModel changed");
+						setDateSelected();
+						if (paymentAmountSelected && dateSelected) {
+							makePaymentButton.setEnabled(true);
+						}
+					} else {
+						utilDateModel=new UtilDateModel();
+						if(listSet){System.out.println("DateModel reinitialised");}
+					}
+				}
+			});
+			paymentToPanel = new JDatePanelImpl(utilDateModel);
 			makePaymentButton.addActionListener(new ActionListener() {
-
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
+					if(utilDateModel.getValue()==null){
+						makePaymentButton.setEnabled(false);
+						System.out.println("utilDateModel.getValue()="+utilDateModel.getValue());
+						return;
+						}
 					Common.makePayment(paymentTypeList.getSelectedValue(),
 							globalMember, (Date) utilDateModel.getValue(),
 							getPaymentAmount());
@@ -374,17 +398,7 @@ public class MemberCheckInInterface extends JFrame {
 				}
 			});
 			
-			utilDateModel.addChangeListener(new ChangeListener() {
-
-				@Override
-				public void stateChanged(ChangeEvent arg0) {
-					System.out.println("DateModel changed");
-					setDateSelected();
-					if (paymentAmountSelected && dateSelected) {
-						makePaymentButton.setEnabled(true);
-					}
-				}
-			});
+			
 			panel.add(paymentToPanel, BorderLayout.CENTER);
 
 			paymentTypeList.setListData(Common.getPaymentTypes(globalClassType).toArray(
